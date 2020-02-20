@@ -1,0 +1,39 @@
+/// Find All Bridges
+
+#define MAX_NODES 200010
+vector<pair<int, int> > bridges;
+int dfs_num[MAX_NODES], dfs_low[MAX_NODES], dfs_parent[MAX_NODES];
+vector<int> AdjList[MAX_NODES];
+int dfsNumberCounter;
+
+void init()
+{
+    dfsNumberCounter = 0;
+    bridges.clear();
+    for (int j = 0; j < MAX_NODES; j++) {
+        dfs_parent[j] = dfs_num[j] = -1;
+        AdjList[j].clear();
+    }
+}
+
+void bridge(int u)
+{
+    dfs_low[u] = dfs_num[u] = dfsNumberCounter++;
+    for (int j = 0; j < (int)AdjList[u].size(); j++) {
+        if (dfs_num[AdjList[u][j]] == -1) {
+            dfs_parent[AdjList[u][j]] = u;
+            bridge(AdjList[u][j]);
+            if (dfs_low[AdjList[u][j]] > dfs_num[u]) {
+                // this edge is a bridge
+                // do whatever needs to be done here
+                bridges.push_back(make_pair(u, AdjList[u][j]));
+            }
+            dfs_low[u] = min(dfs_low[u], dfs_low[AdjList[u][j]]);
+        }
+        else if (dfs_parent[u] != AdjList[u][j]) {
+            dfs_low[u] = min(dfs_low[u], dfs_low[AdjList[u][j]]);
+        }
+    }
+}
+
+/// Find All Bridges

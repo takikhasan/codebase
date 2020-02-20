@@ -1,0 +1,79 @@
+/** Fastest Prime Sieve with Segmented Sieve and Wheel Factorization **/
+
+void fastest_sieve(int n) {
+    /** Block Size **/
+    const int S = 32768;
+
+    /** Wheel Factorization Initialization **/
+    const int wheelSize = 2 * 3 * 5 * 7 * 11 * 13;
+    vector<int> diff;
+
+    /** Generate primes upto max(sqrt(n), wheelSize) **/
+    vector<int> primes;
+    vector<int> mult;
+    vector<pii > last;
+    int nsqrt = max((int)sqrt(n), wheelSize);
+    vector<char> is_prime(nsqrt + 1, true);
+    vector<char> is_primeW(nsqrt + 1, true);
+    for (int i = 3; i * i <= nsqrt; i += 2) {
+        if (is_prime[i]) {
+            for (int j = i * i; j <= nsqrt; j += i + i) {
+                if (i > 13) is_prime[j] = false;
+                else is_primeW[j] = is_prime[j] = false;
+            }
+        }
+    }
+
+    /** Wheel Factorization Finalization **/
+    diff.pb(1);
+    for (int i = 17; i <= wheelSize; i += 2) {
+        if (is_primeW[i]) diff.pb(i);
+    }
+    const int wheelPrimes = SZ(diff);
+    for (int i = 0; i < wheelPrimes; i++) {
+        if (i != wheelPrimes - 1) diff[i] = diff[i+1] - diff[i];
+        else diff[i] = wheelSize - diff[i] + 1;
+    }
+    for (int i = 17, j = 1; i <= nsqrt; i += diff[j++]) {
+        if (is_prime[i]) {
+            primes.pb(i);
+            mult.pb(i * i);
+            last.pb(mp(i * i, j));
+        }
+        if (j == wheelPrimes) j = 0;
+    }
+
+
+    /** Deal with every block separately **/
+    const int szP = SZ(primes);
+    bitset<S> block;
+    int curr = 1, currIndx = 0;
+    for (int k = 0; k * S <= n; k++) {
+        block.set();
+        int start = k * S;
+        for (int i = 0; i < szP && mult[i] < (start + S); i++) {
+            for (; last[i].ff < start + S; last[i].ff += primes[i] * diff[last[i].ss++]) {
+                block[last[i].ff-start] = false;
+                if (last[i].ss == wheelPrimes) last[i].ss = 0;
+            }
+        }
+        if (k == 0) {
+            block[0] = block[1] = false;
+            /* Six possible primes */
+            char arr[6] = {2, 3, 5, 7, 11, 13};
+            for (int i = 0; i < 6; i++) {
+                if (arr[i] <= n) {
+                    /* Prime in range */
+                }
+            }
+        }
+        for ( ; curr < start + S && curr <= n; curr += diff[currIndx++]) {
+            if (block[curr-start]) {
+                /* curr is a prime */
+            }
+            if (currIndx == wheelPrimes) currIndx = 0;
+        }
+    }
+}
+
+/** Fastest Prime Sieve with Segmented Sieve and Wheel Factorization **/

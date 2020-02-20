@@ -1,0 +1,84 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// source: cyclic shift: emaxx.ru
+//	   lcp: geeksforgeeks
+
+vector<int> sort_cyclic_shifts(string const& s) {
+    int n = s.size();
+    const int alphabet = 256;
+    vector<int> p(n), cnt(max(n, alphabet)), c(n);
+    for (int i = 0; i < n; i++) cnt[i] = 0;
+    for (int i=0; i<n; ++i)
+        ++cnt[s[i]];
+    for (int i=1; i<alphabet; ++i)
+        cnt[i] += cnt[i-1];
+    for (int i=0; i<n; ++i)
+        p[--cnt[s[i]]] = i;
+    c[p[0]] = 0;
+    int classes = 1;
+    for (int i=1; i<n; ++i) {
+        if (s[p[i]] != s[p[i-1]])  ++classes;
+        c[p[i]] = classes-1;
+    }
+    int pn[n], cn[n];
+    for (int h=0; (1<<h)<n; ++h) {
+        for (int i=0; i<n; ++i) {
+            pn[i] = p[i] - (1<<h);
+            if (pn[i] < 0)  pn[i] += n;
+        }
+        for (int i = 0; i < n; i++) cnt[i] = 0;
+        for (int i=0; i<n; ++i)
+            ++cnt[c[pn[i]]];
+        for (int i=1; i<classes; ++i)
+            cnt[i] += cnt[i-1];
+        for (int i=n-1; i>=0; --i)
+            p[--cnt[c[pn[i]]]] = pn[i];
+        cn[p[0]] = 0;
+        classes = 1;
+        for (int i=1; i<n; ++i) {
+            int mid1 = (p[i] + (1<<h)) % n,  mid2 = (p[i-1] + (1<<h)) % n;
+            if (c[p[i]] != c[p[i-1]] || c[mid1] != c[mid2])
+                ++classes;
+            cn[p[i]] = classes-1;
+        }
+        for (int i = 0; i < n; i++) c[i] = cn[i];
+    }
+    return p;
+
+}
+
+vector<int> kasai(string txt, vector<int> p)
+{
+    int n = txt.size();
+    vector<int> lcp(n, 0);
+    vector<int> invSuff(n, 0);
+    for (int i=0; i < n; i++)
+        invSuff[p[i]] = i;
+    int k = 0;
+    for (int i=0; i<n; i++) {
+        if (invSuff[i] == n-1) {
+            k = 0;
+            continue;
+        }
+        int j = p[invSuff[i]+1];
+        while (i+k<n && j+k<n && txt[i+k]==txt[j+k])
+            k++;
+        lcp[invSuff[i]] = k;
+        if (k>0)
+            k--;
+    }
+    return lcp;
+}
+
+int main()
+{
+    string s;
+    cin >> s;
+    vector<int> p = sort_cyclic_shifts(s);
+    // by default this sorts all the cyclic shifs of the string
+    // add '$' or '#' or both at appropriate positions to do awesome things
+    vector<int> lcp = kasai(s, p);
+
+    return 0;
+}

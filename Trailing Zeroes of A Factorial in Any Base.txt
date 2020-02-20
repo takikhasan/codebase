@@ -1,0 +1,76 @@
+#include<stdio.h>
+#include<bits/stdc++.h>
+using namespace std;
+
+// N <= 10^18, B <= 10^12
+
+const int M = 1000010; // maximum number of cubes
+
+LL N, B;
+vector<pair<LL, int> > v;
+vector<int> primes;
+bool ff[M];
+
+
+LL ans()
+{
+    LL ret = inf * inf;
+    for (pair<LL, int> p : v) {
+        LL pr = p.ff;
+        LL cnt = 0;
+        while (N / pr) {
+            cnt += N / pr;
+            LL d = N / pr;
+            if (d >= p.ff) pr *= p.ff;
+            else break;
+        }
+//        error(cnt);
+        cnt /= p.ss;
+//        error(cnt);
+        ret = min(cnt, ret);
+    }
+    return ret;
+}
+
+void factorize()
+{
+    for (int p : primes) {
+        if (B % p == 0) {
+            int cnt = 0;
+            while (B % p == 0) {
+                cnt++;
+                B /= p;
+            }
+            v.pb(mp((LL)p, cnt));
+        }
+    }
+    if (B != 1) {
+        v.pb(mp(B, 1));
+    }
+}
+
+void g()
+{
+    for (int i = 3; i * i <= 1000000; i += 2) {
+        if (!ff[i])
+        for (int j = i * i; j <= 1000000; j += 2 * i) {
+            ff[j] = 1;
+        }
+    }
+    primes.pb(2);
+    for (int i = 3; i <= 1000000; i += 2) {
+        if (!ff[i]) primes.pb(i);
+    }
+}
+
+int main()
+{
+    g();
+    I(N, B);
+    factorize();
+//    error(v);
+    O(ans());
+
+
+    return 0;
+}

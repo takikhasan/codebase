@@ -1,0 +1,148 @@
+/** Montgomery Modular Multiplication **/
+
+using u32 = unsigned int;
+using u64 = unsigned long long;
+using i64 = long long;
+
+u64 mulmod(u64 a, u64 b, u64 c){
+    u64 x = 0, y = a % c;
+    while (b > 0) {
+        if (b % 2 == 1) {
+            x = (x + y) % c;
+        }
+        y = (y * 2) % c;
+        b /= 2;
+    }
+    return x % c;
+}
+
+bool willOverflow(u64 a, u64 b, u64 result) {
+    if (b != 0 && a > result / b) return 1;
+    else return 0;
+}
+
+struct u128 {
+    u64 high, low;
+    static u128 mult(u64 x, u64 y) {
+        u32 a = x >> 32, b = x;
+        u32 c = y >> 32, d = y;
+        u64 ac = (u64)a * c;
+        u64 ad = (u64)a * d;
+        u64 bc = (u64)b * c;
+        u64 bd = (u64)b * d;
+        u64 carry = (u64)(u32)ad + (u64)(u32)bc + (bd >> 32u);
+        u64 high = ac + (ad >> 32u) + (bc >> 32u) + (carry >> 32u);
+        u64 low = (ad << 32u) + (bc << 32u) + bd;
+        return {high, low};
+    }
+};
+
+struct Montgomery {
+    /*
+        For montgomery multiplication we first need to
+        create montgomery space and every time we need
+        montgomery multiplication, we must use numbers
+        in their montgomery forms.
+
+        mod is always fixed.
+
+        R: For montgomery space we need positive integer
+        R >= mod coprime to mod. R is always 2 ^ m for
+        reduced complexity. So, be careful about mod
+        having the prime factor 2. If it does, then
+        handle everything manually.
+
+        Montgomery form of n: (n * R) % mod.
+
+        Functions:
+            Montgomery(u64 n) : Creates montgomery
+            space with fixed mod n.
+
+            u64 init(u64 x) : Returns montgomery form
+            of x in the defined montgomery space.
+
+            u64 reduce(u128 x) : Removes one R from x.
+            If x = (n * R) % mod the returned value
+            will be = n % mod and
+            if x = (n * R * R) % mod the returned
+            value will be = (n * R) % mod.
+            We can use this to revert back to normal
+            form.
+
+            u64 mult(u64 a, u64 b) : Takes in
+            ((a * R) % mod) and ((b * R) % mod) as
+            parameters and creates ((a * b * R * R) %
+            mod). Then reduces it and returns ((a * b
+            * R) % mod).
+    */
+    Montgomery(u64 n) : mod(n), inv(1), r2(-n % n) {
+        for (int i = 0; i < 6; i++)
+            inv *= 2 - n * inv;
+        for (int i = 0; i < 4; i++) {
+            r2 <<= 1;
+            if (r2 >= mod)
+                r2 -= mod;
+        }
+        for (int i = 0; i < 4; i++)
+            if (willOverflow(r2, r2, mod))
+                r2 = mulmod(r2, r2, mod);
+            else
+                r2 = r2 * r2;
+    }
+    u64 init(u64 x) {
+        return mult(x, r2);
+    }
+    u64 reduce(u128 x) {
+        u64 q = x.low * inv;
+        i64 a = x.high - u128::mult(q, mod).high;
+        if (a < 0)
+            a += mod;
+        return a;
+    }
+    u64 mult(u64 a, u64 b) {
+        return reduce(u128::mult(a, b));
+    }
+    u64 mod, inv, r2;
+};
+
+/// Example Use:
+
+u64 montgomeryBigMod(u64 p, u64 e, u64 m) {
+    /*
+       Use this when value of m is too high and there is
+       chance of overflow instead of mulmod(...) for reduced
+       complexity.
+
+       Why Complexity is so low?
+       Montgomery multiplication is only useful when we have
+       a large number of (a * b) % mod operations and the
+       mod is fixed (example: bigMod). Stepwise explanation
+       of reduced complexity of bigMod:
+       i. Create the montgomery space with given mod.
+       ii. Convert the initial ret and p to montgomery forms.
+       iii. After every operation we will have ret and p in
+          montgomery forms.
+       iv. So we are left with the montgomery form of ret at
+          the end.
+       v. If we reduce this ret, we have the original value
+          of ret.
+
+       So, initial space creation and conversion happens
+       once and the final reduction happen once and in
+       between there are many operations which take really
+       small time.
+    */
+    u64 ret = 1;
+    Montgomery space(m);
+    ret = space.init(ret);
+    p = space.init(p);
+    while (e > 0) {
+        if (e & 1) ret = space.mult(ret, p);
+        p = space.mult(p, p);
+        e >>= 1;
+    }
+    ret = space.reduce(u128::mult(ret, 1));
+    return ret;
+}
+
+/** Montgomery Modular Multiplication **/

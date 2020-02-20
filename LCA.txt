@@ -1,0 +1,82 @@
+struct LCA
+{
+    /* 0 indexed */
+    int n;
+    int *l;
+    int **p;
+    int LOG;
+    vector<int> *g;
+    void init1(int nn)
+    {
+        n = nn;
+        l = new int[nn];
+        p = new int*[nn];
+        LOG = log2(nn) + 2;
+        for (int i = 0; i < nn; i++) {
+            p[i] = new int[LOG];
+        }
+        g = new vector<int>[nn];
+    }
+    void init2(int nn, vector<int> gg[])
+    {
+        n = nn;
+        l = new int[nn];
+        p = new int*[nn];
+        LOG = log2(nn) + 2;
+        for (int i = 0; i < nn; i++) {
+            p[i] = new int[LOG];
+        }
+        g = new vector<int>[nn];
+        for (int i = 0; i < nn; i++) {
+            for (int x : gg[i]) {
+                g[i].push_back(x);
+            }
+        }
+    }
+    void addEdge(int u, int v)
+    {
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    void dfs(int u, int pp, int ll)
+    {
+        l[u] = ll;
+        p[u][0] = pp;
+        for (int x : g[u]) {
+            if (x != pp) {
+                dfs(x, u, ll + 1);
+            }
+        }
+    }
+    void build()
+    {
+        dfs(0, -1, 0);
+        for (int i = 1; i < LOG; i++) {
+            for (int j = 0; j < n; j++) {
+                if (p[j][i-1] != -1)
+                    p[j][i] = p[p[j][i-1]][i-1];
+                else
+                    p[j][i] = -1;
+            }
+        }
+    }
+    int lca(int u, int v)
+    {
+        if (l[u] > l[v])
+            swap(u, v);
+        int d = l[v] - l[u];
+        for (int i = 0; i < LOG; i++) {
+            if (CHECK(d, i)) {
+                v = p[v][i];
+            }
+        }
+        if (u == v) return u;
+        for (int i = LOG - 1; i >= 0; i--) {
+            if (p[u][i] != p[v][i]) {
+                u = p[u][i];
+                v = p[v][i];
+            }
+        }
+        return p[u][0];
+    }
+};

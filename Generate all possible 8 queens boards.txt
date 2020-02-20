@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+//complexity: less than 8!(40000)
+
+int all[92][8];
+int row[8];
+int counter;
+
+bool place(int r, int c)
+{
+    for (int prev = 0; prev < c; prev++) {
+        if (row[prev] == r || abs(row[prev] - r) == abs(prev - c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void backtrack(int c)
+{
+    if (c == 8) {
+        for (int i = 0; i < 8; i++) {
+            all[counter][i] = row[i];
+            printf ("%d ", row[i]);
+        }
+        printf("\n");
+        counter++;
+        return;
+    }
+    for (int r = 0; r < 8; r++) {
+        if (place(r, c)) {
+            row[c] = r;
+            backtrack(c + 1);
+        }
+    }
+}
+
+int main()
+{
+    backtrack(0);
+    cout << counter << endl;
+
+    return 0;
+}

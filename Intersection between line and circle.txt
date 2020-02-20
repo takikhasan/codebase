@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// source: http://www.mathwarehouse.com/algebra/linear_equation/write-equation/equation-of-line-given-two-points.php
+// http://www.analyzemath.com/CircleEq/circle_line_intersection.html
+// codeforces: http://codeforces.com/contest/935/problem/C (my solution)
+// if we know that, a line AB goes through points (x1, y1) and (x2, y2)
+// and the center of a circle is (h, k) and the radius of that circle is r
+// and that line intersects the circle,
+// then we can know the points of intersections
+// we can also work with this(after little modification) if we know m and b where, y = mx + b, for the line
+// or if we know that it is parallel with the y-axis (we just wont need to calculate m anymore)
+
+pair<pair<double, double>, pair<double, double> > intersection_between_line_and_circle(double x1, double y1, double x2, double y2, double h, double k, double r)
+{
+    	double px1, py1, px2, py2; // these store the intersection points
+        if (x1 == x2) {
+            px1 = x1; px2 = x1; // the x co-ordinate is definitely fixed
+            double a = 1;
+            double b = -2 * k;
+            double c = k * k - r * r + x1 * x1 - 2 * x1 * h + h * h;
+            double discriminant;
+            discriminant = b * b - 4 * a * c;
+            if (discriminant > 0) {
+                py1 = (-b + sqrt(discriminant)) / (2*a);
+                py2 = (-b - sqrt(discriminant)) / (2*a);
+            }
+            else if (discriminant == 0) {
+                py1 = (-b + sqrt(discriminant)) / (2*a);
+                py2 = py1;
+            }
+        }
+        else {
+            double m = (y2 - y1) / (x2 - x1); // slope of the line
+            double bb = y1 - m * x1; // bb is the b in: y = mx + b
+            double z = bb - y1; // to make eqn simple
+            double a = m * m + 1;
+            double b = 2 * m * z - 2 * h;
+            double c = h * h + z * z - r * r;
+            double discriminant;
+            discriminant = b * b - 4 * a * c;
+            if (discriminant > 0) {
+                px1 = (-b + sqrt(discriminant)) / (2*a);
+                px2 = (-b - sqrt(discriminant)) / (2*a);
+            }
+            else if (discriminant == 0) {
+                px1 = (-b + sqrt(discriminant)) / (2*a);
+                px2 = px1;
+            }
+            py1 = m * px1 + bb;
+            py2 = m * px2 + bb;
+        }
+        return make_pair(make_pair(px1, py1), make_pair(px2, py2));
+}
+
+int main()
+{
+    while (1) {
+        double x1, y1, x2, y2, h, k, r;
+        scanf("%lf%lf%lf%lf%lf%lf%lf", &x1, &y1, &x2, &y2, &h, &k, &r);
+        pair<pair<double, double>, pair<double, double> > points = intersection_between_line_and_circle(x1, y1, x2, y2, h, k, r);
+        printf("%lf %lf\n%lf %lf\n", points.first.first, points.first.second, points.second.first, points.second.second);
+    }
+
+    return 0;
+}

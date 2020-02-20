@@ -1,0 +1,138 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// O(n log n) - Manber and Myers algorithm
+// Refer to "Suffix arrays: A new method for on-line txting searches",
+// by Udi Manber and Gene Myers
+
+const int MAX = 100010; // change this according to the maximum length of txt
+string txt; // input
+int iSA[MAX], SA[MAX]; // output (inverse suffix array and suffix array)
+int cnt[MAX], nextt[MAX];
+bool bh[MAX], b2h[MAX];
+
+bool smaller_first_char(int a, int b)  {
+    return txt[a] < txt[b];
+}
+
+void suffixSort(int n) {
+    for (int i = 0; i < n; ++i) {
+        SA[i] = i;
+    }
+    sort(SA, SA + n, smaller_first_char);
+    for (int i = 0; i < n; ++i) {
+        bh[i] = i == 0 || txt[SA[i]] != txt[SA[i-1]];
+        b2h[i] = false;
+    }
+    for (int h = 1; h < n; h <<= 1) {
+        int buckets = 0;
+        for (int i = 0, j; i < n; i = j) {
+            j = i + 1;
+            while (j < n && !bh[j]) j++;
+            nextt[i] = j;
+            buckets++;
+        }
+        if (buckets == n) break;
+        for (int i = 0; i < n; i = nextt[i]) {
+            cnt[i] = 0;
+            for (int j = i; j < nextt[i]; ++j) {
+                iSA[SA[j]] = i;
+            }
+        }
+        cnt[iSA[n - h]]++;
+        b2h[iSA[n - h]] = true;
+        for (int i = 0; i < n; i = nextt[i]) {
+            for (int j = i; j < nextt[i]; ++j) {
+                int s = SA[j] - h;
+                if (s >= 0) {
+                    int head = iSA[s];
+                    iSA[s] = head + cnt[head]++;
+                    b2h[iSA[s]] = true;
+                }
+            }
+            for (int j = i; j < nextt[i]; ++j) {
+                int s = SA[j] - h;
+                if (s >= 0 && b2h[iSA[s]]) {
+                  for (int k = iSA[s] + 1; !bh[k] && b2h[k]; k++) b2h[k] = false;
+                }
+            }
+        }
+        for (int i = 0; i < n; ++i) {
+            SA[iSA[i]] = i;
+            bh[i] |= b2h[i];
+        }
+    }
+    for (int i = 0; i < n; ++i) {
+        iSA[SA[i]] = i;
+    }
+}
+
+// Begin of the O(n) longest common prefix algorithm
+// Refer to "Linear-Time Longest-Common-Prefix Computation in Suffix Arrays and Its Applications"
+// by Toru Kasai, Gunho Lee, Hiroki Arimura, Setsuo Arikawa, and Kunsoo Park.
+int lcp[MAX]; // lcp[i] = length of the longest common prefix of suffix SA[i] and suffix SA[i-1]
+int lcp2[MAX]; // lcp[i] = length of the longest common prefix of suffix SA[i] and suffix SA[i+1]
+
+void getlcp(int n) {
+    for (int i = 0; i < n; ++i) {
+        iSA[SA[i]] = i;
+    }
+    lcp[0] = 0;
+    for (int i = 0, h = 0; i < n; ++i) {
+        if (iSA[i] > 0) {
+            int j = SA[iSA[i]-1];
+            while (i + h < n && j + h < n && txt[i+h] == txt[j+h]) h++;
+            lcp[iSA[i]] = h;
+            if (h > 0) h--;
+        }
+    }
+}
+void getlcp2(int n) {
+    for (int i = 0; i < n; ++i) {
+        iSA[SA[i]] = i;
+    }
+    int k = 0;
+    for (int i = 0; i < n; i++) {
+        if (iSA[i] == n-1) {
+            k = 0;
+            continue;
+        }
+        int j = SA[iSA[i]+1];
+        while (i + k < n && j + k < n && txt[i+k] == txt[j+k]) k++;
+        lcp2[iSA[i]] = k;
+        if (k > 0) k--;
+    }
+
+}
+// End of longest common prefixes algorithm
+
+void suffix_array_and_lcp()
+{
+    // txt is global
+    int len = txt.size();
+    suffixSort(len);
+    // for lcp && lcp2
+    getlcp(len); getlcp2(len);
+}
+
+int main()
+{
+    cin >> txt;
+    suffix_array_and_lcp();
+    // print suffix array
+    for (int i = 0; i < txt.size(); i++) {
+        printf("%d ", SA[i]);
+    }
+    printf("\n");
+    // print lcp
+    for (int i = 0; i < txt.size(); i++) {
+        printf("%d ", lcp[i]);
+    }
+    printf("\n");
+    // print lcp2
+    for (int i = 0; i < txt.size(); i++) {
+        printf("%d ", lcp2[i]);
+    }
+
+    return 0;
+}

@@ -1,0 +1,80 @@
+/* Fastest nth fibonacci */
+
+#define MAXN 60
+#define MAXM 4
+long long int MOD, N;
+long long F[MAXN][MAXM], FB[MAXN+5];
+
+/// 1 <= N, MOD <= 10 ^ 18 using fast doubling
+/// Call init() first
+long long int mulmod(long long int a,long long int b) {
+   long double res = a;
+   res *= b;
+   long long int c = (long long)(res / MOD);
+   a *= b;
+   a -= c * MOD;
+   a %= MOD;
+   if (a < 0) a += MOD;
+   return a;
+}
+long long int  f(long long int  n,int depth = 0 ) {
+    if(n<=MAXN){
+        return FB[n]%MOD ;
+    }
+    int val = n%4 ;
+    if (F[depth][val] != -1)
+        return F[depth][val];
+    long long int  k=n >> 1;
+    long long int a,b,c;
+    a = f(k,depth+1) ;
+    b = f(k-1,depth+1) ;
+    if (n%2==0) {
+        F[depth][val] = (mulmod(a,a) + mulmod(b,b));
+    }else {
+        c = f(k+1,depth+1) ;
+        F[depth][val] = (mulmod(a,c) + mulmod(b,a));
+    }
+    if(F[depth][val] >= MOD)
+        F[depth][val] -= MOD ;
+    return F[depth][val];
+}
+void init()
+{
+    FB[0] = 1 ;
+    FB[1] = 1 ;
+    for(int i=2;i<=64;i++){
+        FB[i] = FB[i-1] + FB[i-2] ;
+    }
+}
+/// Find NNth fib number mod MM
+long long nthFib(long long NN, long long MM)
+{
+    memset(F,-1,sizeof F);
+    N = NN;
+    MOD = MM;
+    return (N==0 ? 0 : f(N-1));
+}
+/// Find the (nthFib(0, MM) + nthFib(1, MM) + nthFib(2, MM) + nthFib(3, MM) + .... + nthFib(NN, MM)) % MM
+long long sumUpToNth(long long NN, long long MM)
+{
+    return (nthFib(NN + 2, MM) - 1 + MM) % MM;
+}
+
+/*
+    Fibonacci formulas:
+
+    i. F(n-1)F(n+1) - F(n)F(n) = (-1)^n
+    ii. F(n+k) = F(k)F(n+1) - F(k-1)F(n)
+    iii. F(2n) = F(n)(F(n+1) + F(n-1))
+    iv. For any positive integer k, F(nk) is multiple of F(n)
+    v. If F(m) is multiple of F(n), then m is multiple of n
+    vi. GCD(F(m), F(n)) = F(GCD(m, n)
+    vii. Fibonacci numbers are the worst possible inputs for Eucledian(GCD) algorithm.
+    (might form patterns)
+    viii. Zeckendorf's theorem: any natural number n can be uniquely represented as a sum of Fibonacci numbers
+    (the representation cannot use two consecutive Fibonacci numbers). If we have to represent the number
+    with Fibonacci numbers then we can do so similarly as binary representation (take the biggest number <= n
+    and substract it from n until n != 0).
+*/
+
+/* Fastest nth fibonacci */

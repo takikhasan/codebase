@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+long long int b[900000];
+
+int main()
+{
+    long long int hash_pattern = 0;
+    long long int base = 347, mod = 1000000007;
+    long long int temp = 1;
+    for (int i = 0; i < 900000; i++) {
+        b[i] = temp;
+        temp = (temp * base) % mod;
+    }
+    int n1, n2;
+    scanf("%d%d", &n1, &n2);
+    string pat[n1];
+    for (int i = n1 - 1; i >= 0; i--) cin >> pat[i];
+    int m1, m2;
+    scanf("%d%d", &m1, &m2);
+    int p = 0;
+    for (int i = 0; i < n1; i++) {
+        for (int j = 0; j < n2; j++) {
+            hash_pattern += (b[p] * pat[i][j]) % mod;
+            hash_pattern %= mod;
+            if (j == n2 - 1) {
+                p += m2 - n2 + 1;
+            }
+            else p++;
+        }
+    }
+    string txt[m1];
+    for (int i = m1 - 1; i >= 0; i--) cin >> txt[i];
+    long long int pre[m1][m2];
+    p = 0;
+    for (int i = 0; i < m1; i++) {
+        for (int j = 0; j < m2; j++) {
+            long long int z = (b[p] * txt[i][j]) % mod;
+            if (i) z += pre[i-1][j];
+            if (j) z += pre[i][j-1];
+            if (i && j) z -= pre[i-1][j-1];
+            z %= mod;
+            z = (z + mod) % mod;
+            pre[i][j] = z;
+            p++;
+        }
+    }
+    vector<pair<int, int> > ans;
+    for (int i = 0; i < m1; i++) {
+        for (int j = 0; j < m2; j++) {
+            int k = i + n1 - 1, l = j + n2 - 1;
+            if (k >= m1 || l >= m2) continue;
+            long long int z = pre[k][l];
+            if (i) z -= pre[i-1][l];
+            if (j) z -= pre[k][j-1];
+            if (i && j) z += pre[i-1][j-1];
+            z %= mod;
+            z = (z + mod) % mod;
+            p = m2 * i + j;
+            temp = (hash_pattern * b[p]) % mod;
+            temp = (temp + mod) % mod;
+            if (z == temp) {
+                ans.push_back(make_pair(m1 - i - n1 + 1, j + 1));
+            }
+        }
+    }
+    sort(ans.begin(), ans.end());
+    if (!ans.size()) {
+        cout << "NO MATCH FOUND..." << endl;
+        exit(0);
+    }
+    for (int i = 0; i < ans.size(); i++) {
+        printf("(%d,%d)\n", ans[i].first, ans[i].second);
+    }
+
+    return 0;
+}

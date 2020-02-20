@@ -1,0 +1,85 @@
+/*   Matrix   */
+
+long long mulmod(long long a, long long b, long long c) {
+    long long x = 0, y = a % c;
+    while (b > 0) {
+        if (b % 2 == 1){
+            x = (x + y) % c;
+        }
+        y = (y * 2) % c;
+        b /= 2;
+    }
+    return x % c;
+}
+
+bool willOverflow(long long a, long long b, long long result) {
+    a = abs(a);
+    b = abs(b);
+    result = abs(result);
+    if (b != 0 && a > result / b) return 1;
+    else return 0;
+}
+
+long long matrixMod = -1;
+struct Matrix
+{
+    vector<vector<long long> > matrix;
+    /* change matrixMod if you need modulus operation on the elements of the matrix */
+
+    void Resize(long long n, long long m) {
+        matrix.clear();
+        for (int j = 0; j < n; j++) {
+            matrix.push_back(vector<long long>());
+            matrix[j].clear();
+            matrix[j].resize(m);
+            for (int i = 0; i < m; i++) matrix[j][i] = 0;
+        }
+    }
+    /* Complexity for square matrix: d^3 */
+    Matrix operator * (Matrix B) {
+        Matrix Ans; long long n, m;
+        Ans.Resize(n = (int)matrix.size(), m = (int)matrix[0].size());
+        for (long long j = 0; j < n; j++) {
+            for (long long i = 0; i < m; i++) {
+                Ans.matrix[j][i] = 0;
+                for (long long k = 0; k < m; k++) {
+                    if (matrixMod != -1) {
+                        if (willOverflow(matrix[j][k], B.matrix[k][i], LLONG_MAX))
+                            Ans.matrix[j][i] += mulmod(matrix[j][k], B.matrix[k][i], matrixMod);
+                        else
+                            Ans.matrix[j][i] += (matrix[j][k] * B.matrix[k][i]) % matrixMod;
+                        Ans.matrix[j][i] %= matrixMod;
+                    }
+                    else {
+                        Ans.matrix[j][i] += matrix[j][k] * B.matrix[k][i];
+                    }
+                }
+            }
+        }
+        return Ans;
+    }
+    /* Complexity: d^3log(power) */
+    Matrix pow(long long power) {
+        if (power == 1) return *this;
+        Matrix ret = pow(power / 2);
+        ret = ret * ret;
+        if (power % 2) ret = ret * (*this);
+        return ret;
+    }
+} mat;
+
+/// Matrix Applications
+
+/* Complexity: 8log(n) */
+long long nthFib(long long n)
+{
+    if (!n) return 0;
+    /* change matrixMod in Matrix to change modulus globally */
+    Matrix a;
+    a.Resize(2, 2);
+    a.matrix[0][0] = 0;
+    a.matrix[0][1] = a.matrix[1][0] = a.matrix[1][1] = 1;
+    return a.pow(n).matrix[0][1];
+}
+
+/*   Matrix   */

@@ -1,0 +1,64 @@
+typedef pair<LL, int> ii;
+#define INF LLONG_MAX 
+ 
+class DirectedGraph
+{
+public:
+    int nodes;
+    vector<pair<int, int> >* AdjList;
+    long long int* dist;
+    int* par;
+    DirectedGraph(int n)
+    {
+        nodes = n;
+        AdjList = new vector<pair<int, int> > [n];
+        dist = new long long int[n];
+        par = new int[n];
+    }
+    void addEdge(int u, int v, int c)
+    {
+        AdjList[u].push_back(make_pair(v, c));
+    }
+    void dijkstra(int s)
+    {
+        for (int i = 0; i < nodes; i++) {
+            dist[i] = INF;
+            par[i] = -1;
+        }
+        dist[s] = 0;
+        priority_queue<ii, vector<ii>, greater<ii> > pq; pq.push(ii(0, s)); // change to pair<long long int, int> if needed
+        while (!pq.empty()) {
+            ii top = pq.top(); pq.pop();       // change
+            LL d = top.first;
+            int u = top.second; // change
+            if (d == dist[u]) {
+                for (auto it = AdjList[u].begin(); it != AdjList[u].end(); it++) {
+                    int v = it->first, weight_u_v = it->second;
+                    if (dist[u] + weight_u_v < dist[v]) {
+                        dist[v] = dist[u] + weight_u_v;
+                        par[v] = u;
+                        pq.push(ii(dist[v], v)); // change
+                    }
+                }
+            }
+        }
+    }
+    void path(int dest)
+    {
+        if (par[dest] == -1) {
+            printf("-1\n");
+            return;
+        }
+        vector<int> v;
+        int curr = dest;
+        while (curr != -1) {
+            v.pb(curr);
+            curr = par[curr];
+        }
+        reverse(all(v));
+        for (int x : v) {
+            printf("%d ", x);
+        }
+        printf("\n");
+    }
+};

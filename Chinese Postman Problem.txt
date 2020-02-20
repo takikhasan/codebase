@@ -1,0 +1,100 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define MAX 20
+
+int graph[MAX][MAX];
+int degree[MAX];
+vector<int> odd;
+int n;
+
+#define INF 1000000000
+
+bool eulerckt()
+{
+    odd.clear();
+    for (int i = 0; i < n; i++) {
+        if (degree[i] % 2 == 1) odd.push_back(i);
+    }
+    return (odd.size() == 0);
+}
+
+int chinesePostman()
+{
+    // start floyd
+    for (int i = 0; i < n; i++) graph[i][i] = 0;
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (graph[i][k] + graph[k][j] < graph[i][j]) {
+                    graph[i][j] = graph[i][k] + graph[k][j];
+                }
+            }
+        }
+    }
+    // end floyd
+    int x = (int)odd.size();
+    int completeGraph[x][x];
+    for (int i = 0; i < x; i++) {
+        for (int j = 0; j < x; j++) {
+            completeGraph[i][j] = graph[odd[i]][odd[j]];
+        }
+    }
+    // minimum cost perfect matching using bitmask dp
+    int bitmaskdp[1<<x];
+    bitmaskdp[0] = 0;
+    for (int mask = 3; mask < (1 << x); mask++) {
+        vector<int> onbits;
+        for (int i = 0; i < x; i++) {
+            if (mask & (1 << i)) onbits.push_back(i);
+        }
+        if (onbits.size() % 2 == 1) continue;
+        int minn = INT_MAX;
+        for (int i = 0; i < onbits.size(); i++) {
+            for (int j = i + 1; j < onbits.size(); j++) {
+                int pos1 = onbits[i], pos2 = onbits[j];
+                int temp = mask;
+                temp &= ~(1 << pos1);
+                temp &= ~(1 << pos2);
+                minn = min(minn, bitmaskdp[temp] + completeGraph[pos1][pos2]);
+            }
+        }
+        bitmaskdp[mask] = minn;
+    }
+    // end minimum cost perfect matching using bitmask dp
+    return bitmaskdp[(1<<x)-1];
+}
+
+int main()
+{
+    int t;
+    scanf("%d", &t);
+    for (int i = 1; i <= t; i++) {
+        for (int j = 0; j < MAX; j++) {
+            degree[j] = 0;
+            for (int k = 0; k < MAX; k++) {
+                graph[j][k] = INF;
+            }
+        }
+        int m;
+        scanf("%d%d", &n, &m);
+        int ans = 0;
+        while (m--) {
+            int x, y, c;
+            scanf("%d%d%d", &x, &y, &c);
+            graph[x-1][y-1] = min(c, graph[x-1][y-1]);
+            graph[y-1][x-1] = min(c, graph[y-1][x-1]);
+            degree[x-1]++; degree[y-1]++;
+            ans += c;
+        }
+        if (eulerckt()) {
+            printf("Case %d: %d\n", i, ans);
+        }
+        else {
+            ans += chinesePostman();
+            printf("Case %d: %d\n", i, ans);
+        }
+    }
+
+    return 0;
+}

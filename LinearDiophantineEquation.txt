@@ -1,0 +1,109 @@
+struct LinearDiophantineEquation
+{
+    /* ax + by = c */
+    /* Given a, b, c, find x and y */
+
+    /* Chicken McNugget Theorem (or Postage Stamp Problem or Frobenius Coin Problem):
+       All multiples of gcd(m, n) greater than (lcm(m, n) - m - n) are representable in the form
+       am + bn for some non-negative integers a, b and positive integers m, n.
+    */
+
+    /* If we know a solution (x, y) and find another solution (x', y') then,
+       x' + y' = x + y + k * (b - a) / g.
+       We can use this to find the solution with minimum x + y or maximum x + y.
+       x' = x + (k * b) / g;
+       y' = y - (k * a) / g;
+    */
+
+    LL egcd(LL a, LL b, LL &x, LL &y) {
+        if (a == 0) {
+            x = 0;
+            y = 1;
+            return b;
+        }
+        LL x1, y1;
+        LL d = egcd(b % a, a, x1, y1);
+        x = y1 - (b / a) * x1;
+        y = x1;
+        return d;
+    }
+
+    bool find_any_solution(LL a, LL b, LL c, LL &x0, LL &y0, LL &g) {
+        /* The solution is stored in x0 and y0 */
+        /* Does not handle a = 0 && b = 0 */
+
+        g = egcd(abs(a), abs(b), x0, y0);
+        if (c % g) {
+            return false;
+        }
+        x0 *= c / g;
+        y0 *= c / g;
+        if (a < 0) x0 = -x0;
+        if (b < 0) y0 = -y0;
+        return true;
+    }
+
+    void shift_solution(LL &x, LL &y, LL a, LL b, LL cnt) {
+        x += cnt * b;
+        y -= cnt * a;
+    }
+    LL find_all_solutions(LL a, LL b, LL c, LL minx, LL maxx, LL miny, LL maxy, LL &lx, LL &rx) {
+        /* Returns the number of solutions when x >= minx && x <= maxx
+           and y >= miny && y <= maxy.
+           Calculates lx and rx.
+           To find all the solutions, just need to iterate through x = lx + kb and
+           find the corresponding y using the equation ax + by = c.
+           Does not handle a = 0 || b = 0 (Now it handles)
+        */
+        if (a == 0 && b == 0) {
+            if (c == 0) return (maxx - minx + 1) * (maxy - miny + 1);
+            else return 0;
+        }
+        else if (a == 0) {
+            if (c % b) return 0;
+            LL z = c / b;
+            if (z >= miny && z <= maxy) return (maxx - minx + 1);
+            else return 0;
+        }
+        else if (b == 0) {
+            if (c % a) return 0;
+            LL z = c / a;
+            if (z >= minx && z <= maxx) return (maxy - miny + 1);
+            else return 0;
+        }
+        /* Handling a == 0 || b == 0 */
+
+        LL x, y, g;
+        if (!find_any_solution(a, b, c, x, y, g))
+            return 0;
+        a /= g;  b /= g;
+        LL sign_a = a > 0 ? +1 : -1;
+        LL sign_b = b > 0 ? +1 : -1;
+        shift_solution(x, y, a, b, (minx - x) / b);
+        if (x < minx)
+            shift_solution(x, y, a, b, sign_b);
+        if (x > maxx)
+            return 0;
+        LL lx1 = x;
+        shift_solution(x, y, a, b, (maxx - x) / b);
+        if (x > maxx)
+            shift_solution(x, y, a, b, -sign_b);
+        LL rx1 = x;
+        shift_solution(x, y, a, b, - (miny - y) / a);
+        if (y < miny)
+            shift_solution(x, y, a, b, -sign_a);
+        if (y > maxy)
+            return 0;
+        LL lx2 = x;
+        shift_solution(x, y, a, b, - (maxy - y) / a);
+        if (y > maxy)
+            shift_solution(x, y, a, b, sign_a);
+        LL rx2 = x;
+        if (lx2 > rx2)
+            swap(lx2, rx2);
+        lx = max(lx1, lx2);
+        rx = min(rx1, rx2);
+        if (lx > rx) return 0;
+        return (rx - lx) / abs(b) + 1;
+    }
+} LDE;

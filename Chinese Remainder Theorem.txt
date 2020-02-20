@@ -1,0 +1,51 @@
+struct CRT
+{
+    long long GCD(long long a, long long b) { return (b == 0) ? a : GCD(b, a % b); }
+    inline long long LCM(long long a, long long b) { return a / GCD(a, b) * b; }
+    inline long long normalize(long long x, long long mod) { x %= mod; if (x < 0) x += mod; return x; }
+    struct GCD_type { long long x, y, d; };
+    GCD_type ex_GCD(long long a, long long b)
+    {
+        if (b == 0) return {1, 0, a};
+        GCD_type pom = ex_GCD(b, a % b);
+        return {pom.y, pom.x - a / b * pom.y, pom.d};
+    }
+    // Helper Functions
+
+    pair<long long, long long> calc(int t, long long aa[], long long nn[])
+    {
+        // Make sure the arrays are 1 indexed
+        long long* a = new long long[t+1];
+        long long* n = new long long[t+1];
+        long long ans, lcm;
+        for(int i = 1; i <= t; i++) {
+            a[i] = aa[i];
+            n[i] = nn[i];
+            normalize(a[i], n[i]);
+        }
+        ans = a[1];
+        lcm = n[1];
+        for(int i = 2; i <= t; i++) {
+            auto pom = ex_GCD(lcm, n[i]);
+            int x1 = pom.x;
+            int d = pom.d;
+            if((a[i] - ans) % d != 0) return cerr << "No solutions" << endl, mp(-1, -1);
+            ans = normalize(ans + x1 * (a[i] - ans) / d % (n[i] / d) * lcm, lcm * n[i] / d);
+            lcm = LCM(lcm, n[i]); // you can save time by replacing above lcm * n[i] /d by lcm = lcm * n[i] / d
+        }
+        return make_pair(ans, lcm);
+    }
+    // t is the number of congruences
+    // Array is 1 indexed
+    // x mod n1 = a1 mod n1
+    // x mod n2 = a2 mod n2
+    // x mod n3 = a3 mod n3
+    // Here there is an unique value for a certain range.
+    // This range will be n1 * n2 * n3 if all of them
+    // are pairwise co-prime. But can be different otherwise.
+    // The unique value is stored in "ans" and the range is
+    // stored in "lcm".
+    // The value repeats after "lcm".
+    // If all the n's are not pairwise co-prime then there
+    // might not be an answer.
+} crt;

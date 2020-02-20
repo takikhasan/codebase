@@ -1,0 +1,73 @@
+const int M = 520; // maximum number of cubes
+
+/*... min cost flow ...*/
+
+struct edge {int to, cap, cost, rev;};
+
+int V;
+int dist[M];
+const int INF = 1e9;
+int prevv[M], preve[M];
+bool in_que[M];
+vector<edge> g[M];
+
+inline void add_edge(int from, int to, int cap, int cost) {
+	g[from].push_back((edge){to, cap, cost, (int)g[to].size()});
+	g[to].push_back((edge){from, 0, -cost, (int)g[from].size() - 1});
+}
+
+int min_cost_flow(int s, int t, int f) {
+	int cost = 0, flow = 0;
+
+	while (f > 0) {
+		fill(dist, dist + V, INF);
+
+		queue<int> que;
+
+		dist[s] = 0;
+		que.push(s);
+
+		while (!que.empty()) {
+			int v = que.front(); que.pop();
+
+			in_que[v] = false;
+
+			for (int i = 0; i < (int)g[v].size(); i++) {
+				edge &e = g[v][i];
+
+				if (e.cap > 0 && dist[e.to] > dist[v] + e.cost) {
+					dist[e.to] = dist[v] + e.cost;
+					prevv[e.to] = v;
+					preve[e.to] = i;
+
+					if (!in_que[e.to]) {
+						in_que[e.to] = true;
+						que.push(e.to);
+					}
+				}
+			}
+		}
+
+        if (dist[t] == INF) break;
+		int d = f;
+
+		for (int v = t; v != s; v = prevv[v]) {
+			d = min(d, g[prevv[v]][preve[v]].cap);
+		}
+
+		f -= d;
+		flow += d;
+		cost += d * dist[t];
+
+		for (int v = t; v != s; v = prevv[v]) {
+			edge &e = g[prevv[v]][preve[v]];
+
+			e.cap -= d;
+			g[e.to][e.rev].cap += d;
+		}
+	}
+
+	return cost;
+}
+
+/*... min cost flow ...*/

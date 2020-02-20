@@ -1,0 +1,70 @@
+// this is the normal version and computes how many nodes with some color exists
+// in O(nlogn)
+
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long int LL;
+typedef long double LD;
+
+int dx[] = {0, 0, -1, +1};
+int dy[] = {+1, -1, 0, 0};
+
+#define maxn 100000 // number of nodes
+
+vector<int> g[maxn]; // graph
+
+int col[maxn]; // color of each node, not necessarily color, could be any property
+int sz[maxn]; // size of each subtree
+
+int cnt[maxn]; // this array could be more than number of nodes as there can be more colors
+bool big[maxn]; // so could this
+
+void add(int v, int p, int x){
+    cnt[col[v]] += x;
+    for(auto u: g[v])
+        if(u != p && !big[u])
+            add(u, v, x);
+}
+
+// this dfs calculates size of subtrees on the go
+// some other properties like height can be found too
+void dfs(int v, int p, bool keep){
+    sz[v] = 1;
+    int mx = -1, bigChild = -1;
+    for(auto u : g[v])
+       if(u != p && sz[u] > mx)
+          mx = sz[u], bigChild = u, sz[v] += sz[u];
+    sz[v] += sz[bigChild];
+    for(auto u : g[v])
+        if(u != p && u != bigChild)
+            dfs(u, v, 0);  // run a dfs on small childs and clear them from cnt
+    if(bigChild != -1)
+        dfs(bigChild, v, 1), big[bigChild] = 1;  // bigChild marked as big and not cleared from cnt
+    add(v, p, 1);
+    //now cnt[c] is the number of vertices in subtree of vertex v that has color c. You can answer the queries easily.
+
+    // main logic can be placed here
+    // .................
+    // end of main logic
+
+    if(bigChild != -1)
+        big[bigChild] = 0;
+    if(keep == 0)
+        add(v, p, -1);
+}
+
+int main()
+{
+    int n, m;
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i < n; i++) {
+        int x;
+        scanf("%d", &x);
+        g[x-1].push_back(i);
+        g[i].push_back(x - 1);
+    }
+
+
+    return 0;
+}

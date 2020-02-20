@@ -1,0 +1,89 @@
+// Complexity: 0(n*(logn)*(logn))
+// This style involves merging smaller subtrees with larger subtrees
+// This is the solution for Lomsat gelral and some problems might be solvable with minor modification
+
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long int LL;
+typedef long double LD;
+
+int dx[] = {0, 0, -1, +1};
+int dy[] = {+1, -1, 0, 0};
+
+#define maxn 100000
+
+int col[maxn];
+map<int, int>* m[maxn]; // Use unordered_map if needed
+// if pair is needed use hashing to generate unique keys if possible
+LL res[maxn];
+int cnt[maxn];
+vector<int> g[maxn];
+
+void dfs(int u, int p){
+    int mx = -1, bigChild = -1;
+    for (int v = 0; v < g[u].size(); v++) {
+        if (g[u][v] == p) continue;
+        dfs(g[u][v], u);
+        if ((int)(*m[g[u][v]]).size() > mx) {
+            mx = (int)(*m[g[u][v]]).size();
+            bigChild = g[u][v];
+        }
+    }
+    if (bigChild == -1) {
+        m[u] = new map<int, int>();
+        (*m[u])[col[u]] = 1;
+        cnt[u] = 1;
+        res[u] = col[u];
+    }
+    else {
+        cnt[u] = cnt[bigChild];
+        res[u] = res[bigChild];
+        for (int v = 0; v < g[u].size(); v++) {
+            if (g[u][v] != bigChild && g[u][v] != p) {
+                for (map<int, int>::iterator it = (*m[g[u][v]]).begin(); it != (*m[g[u][v]]).end(); it++) {
+                    (*m[bigChild])[it->first] += it->second;
+                    if ((*m[bigChild])[it->first] > cnt[u]) {
+                        cnt[u] = (*m[bigChild])[it->first];
+                        res[u] = it->first;
+                    }
+                    else if ((*m[bigChild])[it->first] == cnt[u]) {
+                        res[u] += it->first;
+                    }
+                }
+                delete m[g[u][v]];
+//                This above line is very important
+            }
+        }
+        m[u] = m[bigChild];
+        (*m[u])[col[u]]++;
+        if ((*m[u])[col[u]] > cnt[u]) {
+            cnt[u] = (*m[u])[col[u]];
+            res[u] = col[u];
+        }
+        else if ((*m[u])[col[u]] == cnt[u]) {
+            res[u] += col[u];
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> col[i];
+    }
+    int z = n - 1;
+    while (z--) {
+        int x, y;
+        cin >> x >> y;
+        g[x-1].push_back(y - 1);
+        g[y-1].push_back(x - 1);
+    }
+    dfs(0, -1);
+    for (int i = 0; i < n; i++) {
+        cout << res[i] << ' ';
+    }
+    cout << endl;
+}

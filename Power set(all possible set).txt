@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Source: Geeksforgeeks
+// Complexity: O(2^n * n) where n is the size of main set
+// This code prints power set(all possible subsets) of a main set
+// At the current state, the counter variable starts from 0 in the for loop of printPowerSet function
+// This means for the given code, empty set is a valid set. Make counter = 1 if empty set is not valid
+ 
+void printPowerSet(char *set, int set_size)
+{
+    unsigned int pow_set_size = pow(2, set_size);
+    int counter, j;
+    for (counter = 0; counter < pow_set_size; counter++) {
+        for (j = 0; j < set_size; j++) {
+            if(counter & (1<<j)) printf("%c", set[j]);
+        }
+        printf("\n");
+    }
+}
+ 
+int main()
+{
+    char set[] = {'a','b','c'};
+    printPowerSet(set, 3);
+    
+    return 0;
+}

@@ -1,0 +1,89 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// Source: Geeksforgeeks
+// This is a good data structure if applicable.
+// Complexity: per search and insert and remove: O(M) where M is the maximum length 
+// of key.
+// However, the memory taken by Trie is a bit much, which should be considered.
+// But if it is doable, most likely memory won't be a problem.
+// I wrote the following code for solving an interesting problem involving xor
+// on codeforces. Use this code as a quick look up or memory refreshing material
+// if needed.
+
+
+struct TrieNode
+{
+    struct TrieNode* children[2];
+    int childrenCount[2];
+};
+
+struct TrieNode* getNode()
+{
+    struct TrieNode* pNode = new TrieNode;
+    for (int i = 0; i < 2; i++) {
+        pNode->children[i] = NULL;
+        pNode->childrenCount[i] = 0;
+    }
+    return pNode;
+};
+
+void inserts(struct TrieNode* root, long long int key)
+{
+    struct TrieNode* pCrawler = root;
+    long long int temp = 1;
+    for (int i = 60; i >= 0; i--) {
+        bool flag = key & (temp << i);
+        if (!pCrawler->children[flag]) {
+            pCrawler->children[flag] = getNode();
+        }
+        pCrawler->childrenCount[flag]++;
+        pCrawler = pCrawler->children[flag];
+    }
+}
+
+long long int searchs(struct TrieNode* root, long long int key)
+{
+    long long int t = 0, temp = 1;
+    struct TrieNode* pCrawl = root;
+    for (int i = 60; i >= 0; i--) {
+        bool flag = key & (temp << i);
+        if (flag) {
+            if (pCrawl->childrenCount[!flag]) {
+                pCrawl = pCrawl->children[!flag];
+            }
+            else {
+                t |= (temp << i);
+                pCrawl = pCrawl->children[flag];
+            }
+        }
+        else {
+            if (pCrawl->childrenCount[!flag]) {
+                t |= (temp << i);
+                pCrawl = pCrawl->children[!flag];
+            }
+            else {
+                pCrawl = pCrawl->children[flag];
+            }
+        }
+    }
+    return t;
+}
+
+void removes(struct TrieNode* root, long long int key)
+{
+    struct TrieNode* pCrawler = root;
+    long long int temp = 1;
+    for (int i = 60; i >= 0; i--) {
+        bool flag = key & (temp << i);
+        pCrawler->childrenCount[flag]--;
+        pCrawler = pCrawler->children[flag];
+    }
+}
+
+int main()
+{
+    struct TrieNode* root = getNode();
+
+    return 0;
+}

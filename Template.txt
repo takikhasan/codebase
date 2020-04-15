@@ -36,7 +36,7 @@ const LL mod = 1000000000 + 7;
 
 
 inline void IO() { ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0); }
-inline int dcmp (LD x) { return x < -EPS ? -1 : (x > EPS); }
+template<typename T> inline int dcmp (T x) { const T eps = EPS; return x < -eps ? -1 : (x > eps); }
 
 
 template<class T> inline int CHECK(T MASK, int i) { return (MASK >> i) & 1; }

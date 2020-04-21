@@ -1,24 +1,48 @@
-/*   Matrix   */
+/**   Matrix   */
 
 template<typename T>
 struct Matrix
 {
     vector<vector<T>> matrix;
 
+    Matrix() {}
+
     Matrix(int n, int m)
     {
-        matrix = vector<vector<T>> (n, vector<T> (m, 0));
+        matrix = vector<vector<T>> (n, vector<T> (m));
     }
 
     Matrix operator * (const Matrix& B) const
     {
-        int n = SZ(matrix), m = SZ(B[0]);
-        Matrix ret(n, m); int c = SZ(matrix[0]);
+        int n = SZ(matrix), m = SZ(B[0]), c = SZ(matrix[0]);
+        Matrix ret(n, m);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                for (int k = 0; k < c; k++) {
-                    ret[i][j] += matrix[i][k] * B[k][j];
+                /**
+                 * Initializing ret[i][j] with correct value (and dimension when T is Matrix).
+                 * (%) operator should ignore (Matrix<T> % (int/LL/ULL..)) type operation.
+                 */
+                ret[i][j] = matrix[i][0] * B[0][j];
+                for (int k = 1; k < c; k++) {
+                    ret[i][j] = ret[i][j] + matrix[i][k] * B[k][j];
                 }
+                ret[i][j] = ret[i][j] % 10;
+            }
+        }
+        return ret;
+    }
+
+    Matrix operator + (const Matrix& B) const
+    {
+        int n = SZ(matrix), m = SZ(B[0]);
+        Matrix ret(n, m);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                /**
+                 * (%) operator should ignore (Matrix<T> % (int/LL/ULL..)) type operation.
+                 * Using (%) operator here also is necessary if mod value is given.
+                 */
+                ret[i][j] = matrix[i][j] + B[i][j];
             }
         }
         return ret;
@@ -31,6 +55,12 @@ struct Matrix
         ret = ret * ret;
         if (p % 2) ret = ret * (*this);
         return ret;
+    }
+
+    template<typename N>
+    Matrix& operator % (const N ignore)
+    {
+        return *this;
     }
 
     vector<T>& operator [] (int u) { return matrix[u]; }
@@ -57,4 +87,4 @@ struct Solver
     }
 };
 
-/*   Matrix   */
+/**   Matrix   */

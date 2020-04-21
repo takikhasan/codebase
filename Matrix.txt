@@ -21,12 +21,12 @@ struct Matrix
                 /**
                  * Initializing ret[i][j] with correct value (and dimension when T is Matrix).
                  * (%) operator should ignore (Matrix<T> % (int/LL/ULL..)) type operation.
+                 * Using (%) operator here is necessary if mod value is given.
                  */
                 ret[i][j] = matrix[i][0] * B[0][j];
                 for (int k = 1; k < c; k++) {
                     ret[i][j] = ret[i][j] + matrix[i][k] * B[k][j];
                 }
-                ret[i][j] = ret[i][j] % 10;
             }
         }
         return ret;

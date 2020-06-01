@@ -18,7 +18,6 @@ using namespace std;
 #define     ss                      second
 #define     SZ(x)                   (int)x.size()
 #define     all(x)                  x.begin(), x.end()
-#define     lb(x, y)                lower_bound(all(x), y)
 #define     rep(i, begin, end)      for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 
 
@@ -28,7 +27,6 @@ using namespace std;
 
 #define     PI                      acos(-1.0)
 #define     EPS                     1e-12
-#define     mx                      200010
 #define     S_SIZE                  2000010
 
 
@@ -93,16 +91,26 @@ void err(istream_iterator<string> it, T a, Args... args) {
 
 
 struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) { x += 0x9e3779b97f4a7c15; x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9; x = (x ^ (x >> 27)) * 0x94d049bb133111eb; return x ^ (x >> 31); }
-    size_t operator()(uint64_t x) const { static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count(); return splitmix64(x + FIXED_RANDOM); }
+    static uint64_t splitmix64(uint64_t x) {
+        x += 0x9e3779b97f4a7c15; x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9; x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31); }
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM); }
 };
 struct custom_hash_pair {
-    static uint64_t splitmix64(uint64_t x) { x += 0x9e3779b97f4a7c15; x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9; x = (x ^ (x >> 27)) * 0x94d049bb133111eb; return x ^ (x >> 31); }
-    size_t operator()(pair<uint64_t, uint64_t> x) const { static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count(); return splitmix64(x.ff + FIXED_RANDOM) * 3 + splitmix64(x.ss + FIXED_RANDOM); }
+    static uint64_t splitmix64(uint64_t x) {
+        x += 0x9e3779b97f4a7c15; x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9; x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31); }
+    size_t operator()(pair<uint64_t, uint64_t> x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x.ff + FIXED_RANDOM) * 3 + splitmix64(x.ss + FIXED_RANDOM); }
 };
 
 
-void faster(auto &unorderedMap, int n) { int num = 2; while (num < n) num *= 2; unorderedMap.reserve(num); unorderedMap.max_load_factor(0.25); }
+inline void faster(auto &unorderedMap, int n) {
+    int num = 2; while (num < n) num *= 2; unorderedMap.reserve(num); unorderedMap.max_load_factor(0.25);
+}
 
 // gp_hash_table<LL, int, custom_hash> table;
 // unordered_map<LL, int, custom_hash> table;

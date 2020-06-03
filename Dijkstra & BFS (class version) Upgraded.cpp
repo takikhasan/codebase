@@ -31,8 +31,8 @@ public:
             dist[i] = INF;
             par[i] = -1;
         }
-        dist[s] = 0;
         priority_queue<ii, vector<ii>, greater<ii>> pq; /** BFS: queue<ii> pq; */
+        dist[s] = 0;
         pq.push(ii(0, s));
         while (!pq.empty()) {
             ii top = pq.top(); /** BFS: pq.front(); */

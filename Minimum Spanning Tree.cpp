@@ -1,34 +1,64 @@
-#include<bits/stdc++.h>
-using namespace std;
-
-// Source: Competitive Programming 1(Steven Halim)
-// Minimum spanning tree for undirected weighed graph
-
-typedef pair<int, int> ii;
-priority_queue< pair<int, ii > > EdgeList;
-#define REP(i, a, b) for (int i = int(a); i <= int(b); i++)
-vector<int> pset(1000);
-void initSet(int _size) { pset.resize(_size); REP (i, 0, _size - 1) pset[i] = i; }
-int findSet(int i) { return (pset[i] == i) ? i : (pset[i] = findSet(pset[i])); }
-void unionSet(int i, int j) { pset[findSet(i)] = findSet(j); }
-bool isSameSet(int i, int j) { return findSet(i) == findSet(j); }
-// this is union find disjoint set library
-
-int main()
+/*
+    #1. Elements are numbered from 0 to (n - 1) inclusive
+    #2. Source: Competitive Programming 1 (Steven Halim)
+*/
+struct UnionFindDisjointSet
 {
-    // EdgeList.push(make_pair(-1, make_pair(u, v))); => First this is how you need to make the EdgeList
-    int mst_cost = 0; initSet(V); // V is the number of vertices, they will be numbered 0...V-1
-    vector<pair<int, int> > ans; // to store the edges of the resulting minimum spanning tree
-    while (!EdgeList.empty()) {
-            pair<int, ii> front = EdgeList.top(); EdgeList.pop();
-            if (!isSameSet(front.second.first, front.second.second)) {
-                    mst_cost += (-front.first);
-                    unionSet(front.second.first, front.second.second);
-                    ans.push_back(make_pair(front.second.first, front.second.second)); // Edge was just added
-		    // Do anything else if needed
-            }
+    vector<int> pset;
+    UnionFindDisjointSet(int n) {
+        pset.resize(n);
+        for (int i = 0; i < n; i++) pset[i] = i;
     }
-    printf("%d\n", mst_cost);
+    int findSet(int i) {
+        return (pset[i] == i) ? i : (pset[i] = findSet(pset[i]));
+    }
+    void unionSet(int i, int j) {
+        pset[findSet(i)] = findSet(j);
+    }
+    bool isSameSet(int i, int j) {
+        return findSet(i) == findSet(j);
+    }
+};
 
-    return 0;
-}
+/*
+    #1. T1 -> Data type required for resultant tree's total edge weight (MST cost)
+    #2. T2 -> Data type required for maximum edge weight
+    #3. Nodes are numbered from 0 to (n - 1) inclusive
+    #4. Can find minimum MST or maximum MST depending on value of 'bool minimum' during function call
+    #5. Introduced two data types for memory efficiency
+    #6. Source: Competitive Programming 1 (Steven Halim)
+*/
+template<typename T1, typename T2>
+struct UndirectedGraphMST
+{
+    int nodes;
+    vector<pair<T2, pii>> edges;
+
+    UndirectedGraphMST(int n)
+    {
+        nodes = n;
+    }
+    void addEdge(int u, int v, T2 weight)
+    {
+        edges.pb({weight, {u, v}});
+    }
+    pair<T1, vector<pii>> MST(bool minimum)  /* Total cost & vector of resultant tree edges */
+    {
+        T1 sign = minimum ? 1 : -1;
+        T1 mst_cost = 0; vector<pii> tree_edges;
+        UnionFindDisjointSet S(nodes);
+        priority_queue<pair<T2, pii>> edgeList;
+        for (auto e : edges) edgeList.push({-e.ff * sign, {e.ss.ff, e.ss.ss}});
+
+        while (!edgeList.empty()) {
+            pair<T2, pii> top = edgeList.top(); edgeList.pop();
+            if (!S.isSameSet(top.ss.ff, top.ss.ss)) {
+                mst_cost += -top.ff * sign;
+                S.unionSet(top.ss.ff, top.ss.ss);
+                tree_edges.pb({top.ss.ff, top.ss.ss});
+                /* One of the selected edges, do anything else if needed */
+            }
+        }
+        return {mst_cost, tree_edges};
+    }
+};

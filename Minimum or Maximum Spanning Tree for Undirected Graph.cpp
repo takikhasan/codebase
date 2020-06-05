@@ -42,16 +42,16 @@ struct UndirectedGraphMST
     {
         edges.pb({weight, {u, v}});
     }
-    pair<T1, vector<pii>> MST(bool minimum)  /* Total cost & vector of resultant tree edges */
+    pair<T1, vector<pii>> MST(bool minimum) const /* Total cost & vector of resultant tree edges */
     {
         T1 sign = minimum ? 1 : -1;
         T1 mst_cost = 0; vector<pii> tree_edges;
         UnionFindDisjointSet S(nodes);
-        priority_queue<pair<T2, pii>> edgeList;
-        for (auto e : edges) edgeList.push({-e.ff * sign, {e.ss.ff, e.ss.ss}});
+        vector<pair<T2, pii>> edgeList(all(edges));
+        for (auto &e : edgeList) e.ff = -e.ff * sign;
+        sort(all(edgeList)); reverse(all(edgeList));
 
-        while (!edgeList.empty()) {
-            pair<T2, pii> top = edgeList.top(); edgeList.pop();
+        for (auto top : edgeList) {
             if (!S.isSameSet(top.ss.ff, top.ss.ss)) {
                 mst_cost += -top.ff * sign;
                 S.unionSet(top.ss.ff, top.ss.ss);

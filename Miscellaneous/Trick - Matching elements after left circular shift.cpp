@@ -3,9 +3,9 @@
     #2. Here, hypothetical array a means array of (i, i + 1, i + 2, ..., (i + n - 1) % n) elements of curr
     #3. And, hypothetical array b means array of (0, 1, 2, ..., n - 1) elements of target
     #4. Assumption: Elements of target must be unique (not proven, just intuition)
-    #5. Problems (easy to hard):
-        i.  https://codeforces.com/contest/1365/problem/C
-        ii. https://codeforces.com/problemset/problem/1294/E
+    #5. Problems (easy to hard) - (role model submission / problem page):
+        i.  https://codeforces.com/contest/1365/submission/82814035 (direct template)
+        ii. https://codeforces.com/contest/1294/submission/82290705 (direct template)
 */
 int func(vector<int> curr, vector<int> target)
 {

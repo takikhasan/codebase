@@ -1,6 +1,6 @@
 /*
-    #1. Complete graph is given, but there are some damaged roads
-    #2. We need to find the components without using damaged roads
+    #1. There is a complete graph, but there are some blocked roads
+    #2. We need to find the components without using blocked roads
     #3. Because the number of usable roads is too high, we should use this template
     #4. Otherwise, basic dfs is enough
     #4. Problems (easy to hard) - (role model submission / problem page):

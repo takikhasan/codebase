@@ -1,9 +1,9 @@
 /*
-    #1. There is a complete graph, but there are some blocked roads
-    #2. We need to find the components without using blocked roads
-    #3. Because the number of usable roads is too high, we should use this template
-    #4. Otherwise, basic dfs is enough
-    #4. Problems (easy to hard) - (role model submission / problem page):
+    #1. There is a complete graph, but there are some blocked roads.
+    #2. We need to find the components without using blocked roads.
+    #3. Because the number of usable roads is too high, we should use this template.
+    #4. Otherwise, basic dfs is enough.
+    #5. Problems (easy to hard) - (role model submission / problem page):
         i.  https://codeforces.com/contest/1243/submission/82715710 (direct template)
         ii. https://codeforces.com/contest/190/submission/82717910
 */

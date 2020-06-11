@@ -17,6 +17,9 @@
         Updates: Range or point SET or ADD operation
         Query: For any range, the min value and the last index with that value
                Can be changed to find first index and/or to find max value
+
+    Problems (easy to hard) - (role model submission / problem page):
+        i.  https://codeforces.com/contest/1208/submission/83386421 (direct template)
 */
 
 /*

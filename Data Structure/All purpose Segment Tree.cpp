@@ -52,15 +52,15 @@ LL f2(LL x, LL len, int OPTION)
     }
 }
 
-const LL SUM = 0, MIN = inf, MAX = -inf, XOR = 0, OR = 0, GCD = 0, LCM = 1;
-const LL AND = 1073741823; /// 30 on bits
+const LL SUM = 0, MIN = LLONG_MAX, MAX = LLONG_MIN, XOR = 0, OR = 0, GCD = 0, LCM = 1;
+const LL AND = (1LL << 60) - 1; /// 60 on bits
 
 struct Node {
 	Node *l = 0, *r = 0;
 	int lo, hi;
 	LL mset = inf, madd = 0, val = MAX; /// CHANGE IF NEEDED
 	Node(int lo, int hi) : lo(lo), hi(hi) {} // Large interval of MAX
-	Node(vector<int>& v, int lo, int hi) : lo(lo), hi(hi) {
+	Node(vector<LL>& v, int lo, int hi) : lo(lo), hi(hi) {
 		if (lo + 1 < hi) {
 			int mid = lo + (hi - lo)/2;
 			l = new Node(v, lo, mid); r = new Node(v, mid, hi);
@@ -74,7 +74,7 @@ struct Node {
 		push();
 		return f(l->query(L, R), r->query(L, R));
 	}
-	void set(int L, int R, int x) {
+	void set(int L, int R, LL x) {
 		if (R <= lo || hi <= L) return;
 		if (L <= lo && hi <= R) {
             mset = x, madd = 0;
@@ -85,7 +85,7 @@ struct Node {
 			val = f(l->val, r->val);
 		}
 	}
-	void add(int L, int R, int x) {
+	void add(int L, int R, LL x) {
 		if (R <= lo || hi <= L) return;
 		if (L <= lo && hi <= R) {
 			if (mset != inf) mset += x;

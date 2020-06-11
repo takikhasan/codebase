@@ -1,52 +1,65 @@
-/// All purpose segment tree
+/** All purpose segment tree */
 
 /**
- * Author: Simon Lindholm
- * Date: 2016-10-08
- * License: CC0
- * Source: me
+ * Source Inspiration: KACTL github
  * Description: Segment tree with ability to add or set values of large intervals, and compute max of intervals.
  * Can be changed to other things.
  * Use with a bump allocator for better performance, and SmallPtr or implicit indices to save memory.
  * Time: O(\log N).
  * Usage: Node* tr = new Node(v, 0, sz(v));
  * Range(L, R) means range (L to R-1) inclusive
- * Status: fuzz-tested a bit
  */
 
-//#pragma once
+/*
+    #pragma once
 
-#define size_0 (300 << 19) // 150 MEGABYTES
-#define size_1 (350 << 19) // 175 MEGABYTES -> Safe with moderate capacity
-#define size_2 (400 << 19) // 200 MEGABYTES -> Safe with huge capacity
-#define size_3 (450 << 19) // 225 MEGABYTES
+    #define size_0 (300 << 19) // 150 MEGABYTES
+    #define size_1 (350 << 19) // 175 MEGABYTES -> Safe with moderate capacity
+    #define size_2 (400 << 19) // 200 MEGABYTES -> Safe with huge capacity
+    #define size_3 (450 << 19) // 225 MEGABYTES
 
-static char buf[size_1];
-void* operator new(size_t s) {
-	static size_t i = sizeof buf;
-	assert(s < i);
-	return (void*)&buf[i -= s];
-}
-void operator delete(void*) {}
+    static char buf[size_1];
+    void* operator new(size_t s) {
+        static size_t i = sizeof buf;
+        assert(s < i);
+        return (void*)&buf[i -= s];
+    }
+    void operator delete(void*) {}
+*/
 
-int f(int a, int b)
+LL f(LL a, LL b)
 {
-    return a ^ b; /// CHANGE IF NEEDED
+    return max(a, b); /// CHANGE IF NEEDED
 }
 
-#define SUM 0
-#define MIN inf
-#define MAX -inf
-#define XOR 0
-#define OR 0
-#define AND 1073741823 /// 30 on bits
-#define GCD 0
-#define LCM 1
+const int OSUM = 1, OMIN = 2, OMAX = 3, OXOR = 4, OOR = 5, OAND = 6, OGCD = 7, OLCM = 8;
+
+LL f2(LL x, LL len, int OPTION)
+{
+    /*
+        f2 function should work wonderfully for any kind of tree's SET operation,
+        and for SUM, MIN, MAX type tree's ADD operation, but for other types - doubtful (maybe improved later).
+    */
+    if (OPTION == OSUM) {
+        return len * x;
+    }
+    else if (OPTION == OXOR) {
+        if (len % 2 == 0) return 0;
+        else return x;
+    }
+    else {
+        return x;
+    }
+}
+
+const LL SUM = 0, MIN = inf, MAX = -inf, XOR = 0, OR = 0, GCD = 0, LCM = 1;
+const LL AND = 1073741823; /// 30 on bits
 
 struct Node {
 	Node *l = 0, *r = 0;
-	int lo, hi, mset = inf, madd = 0, val = XOR; /// CHANGE IF NEEDED
-	Node(int lo,int hi):lo(lo),hi(hi){} // Large interval of -inf
+	int lo, hi;
+	LL mset = inf, madd = 0, val = MAX; /// CHANGE IF NEEDED
+	Node(int lo,int hi) : lo(lo), hi(hi) {} // Large interval of MAX
 	Node(vector<int>& v, int lo, int hi) : lo(lo), hi(hi) {
 		if (lo + 1 < hi) {
 			int mid = lo + (hi - lo)/2;
@@ -55,15 +68,18 @@ struct Node {
 		}
 		else val = v[lo];
 	}
-	int query(int L, int R) {
-		if (R <= lo || hi <= L) return XOR; /// CHANGE IF NEEDED
+	LL query(int L, int R) {
+		if (R <= lo || hi <= L) return MAX; /// CHANGE IF NEEDED
 		if (L <= lo && hi <= R) return val;
 		push();
 		return f(l->query(L, R), r->query(L, R));
 	}
 	void set(int L, int R, int x) {
 		if (R <= lo || hi <= L) return;
-		if (L <= lo && hi <= R) mset = val = x, madd = 0;
+		if (L <= lo && hi <= R) {
+            mset = x, madd = 0;
+            val = f2(x, hi - lo, OMAX); /// CHANGE IF NEEDED
+		}
 		else {
 			push(), l->set(L, R, x), r->set(L, R, x);
 			val = f(l->val, r->val);
@@ -74,7 +90,7 @@ struct Node {
 		if (L <= lo && hi <= R) {
 			if (mset != inf) mset += x;
 			else madd += x;
-			val += x;
+			val += f2(x, hi - lo, OMAX); /// CHANGE IF NEEDED
 		}
 		else {
 			push(), l->add(L, R, x), r->add(L, R, x);
@@ -93,4 +109,4 @@ struct Node {
 	}
 };
 
-/// All purpose segment tree
+/** All purpose segment tree */

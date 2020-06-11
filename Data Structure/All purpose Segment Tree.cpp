@@ -59,7 +59,7 @@ struct Node {
 	Node *l = 0, *r = 0;
 	int lo, hi;
 	LL mset = inf, madd = 0, val = MAX; /// CHANGE IF NEEDED
-	Node(int lo,int hi) : lo(lo), hi(hi) {} // Large interval of MAX
+	Node(int lo, int hi) : lo(lo), hi(hi) {} // Large interval of MAX
 	Node(vector<int>& v, int lo, int hi) : lo(lo), hi(hi) {
 		if (lo + 1 < hi) {
 			int mid = lo + (hi - lo)/2;

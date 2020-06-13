@@ -51,22 +51,17 @@ public:
             }
         }
     }
-    void path(int dest)
+    vector<int> path(int dest)
     {
-        if (par[dest] == -1) {
-            printf("-1\n");
-            return;
-        }
-        vector<int> v;
+        vector<int> ret;
+        if (par[dest] == -1)
+            return ret;
         int curr = dest;
         while (curr != -1) {
-            v.pb(curr);
+            ret.pb(curr);
             curr = par[curr];
         }
-        reverse(all(v));
-        for (int x : v) {
-            printf("%d ", x);
-        }
-        printf("\n");
+        reverse(all(ret));
+        return ret;
     }
 };

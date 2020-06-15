@@ -48,8 +48,10 @@ template<typename T> inline int CNT(T MASK) {
 template<class T> inline int RIGHT(T MASK) { return log2(MASK & -MASK); }
 
 
-int dx4[] = { 0, 0, -1, +1 }; int dy4[] = { +1, -1, 0, 0 };
-int dx8[] = { 1, 1, 0, -1, -1, -1, 0, 1, 0 }; int dy8[] = { 0, 1, 1, 1, 0, -1, -1, -1, 0 };
+int dx4[] = { 0, 0, -1, +1 };
+int dy4[] = { +1, -1, 0, 0 };
+int dx8[] = { 1, 1, 0, -1, -1, -1, 0, 1, 0 };
+int dy8[] = { 0, 1, 1, 1, 0, -1, -1, -1, 0 };
 
 
 inline void I(int &a) { scanf("%d", &a); }

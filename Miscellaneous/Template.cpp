@@ -52,17 +52,17 @@ int dx4[] = { 0, 0, -1, +1 }; int dy4[] = { +1, -1, 0, 0 };
 int dx8[] = { 1, 1, 0, -1, -1, -1, 0, 1, 0 }; int dy8[] = { 0, 1, 1, 1, 0, -1, -1, -1, 0 };
 
 
-inline void I(int& a) { scanf("%d", &a); } inline void I(LL& a) { scanf("%lld", &a); }
-inline void I(ULL& a) { scanf("%llu", &a); } inline void I(char* a) { scanf("%s", a); }
-char Iarr[S_SIZE]; inline void I(string& a) { scanf("%s", Iarr); a = Iarr; }
-inline void I(LD& a) { cin >> a; } inline void I(double& a) { cin >> a; }
-inline void I(bool& a) { int aa; I(aa); a = aa; }
-template<typename T1, typename T2>
-void I(pair<T1, T2>& a) { I(a.ff); I(a.ss); }
-template<typename T>
-void I(vector<T>& a) { for (int i = 0; i < SZ(a); i++) I(a[i]); }
-template<typename T, typename... Args>
-void I(T& a, Args&... args) { I(a); I(args...); }
+inline void I(int &a) { scanf("%d", &a); }
+inline void I(LL &a) { scanf("%lld", &a); }
+inline void I(ULL &a) { scanf("%llu", &a); }
+inline void I(char *a) { scanf("%s", a); }
+char Iarr[S_SIZE]; inline void I(string &a) { scanf("%s", Iarr); a = Iarr; }
+inline void I(LD &a) { cin >> a; }
+inline void I(double &a) { cin >> a; }
+inline void I(bool &a) { int aa; I(aa); a = aa; }
+template<typename T1, typename T2> inline void I(pair<T1, T2> &a) { I(a.ff); I(a.ss); }
+template<typename T> inline void I(vector<T> &a) { for (T &aa : a) I(aa); }
+template<typename T, typename... Args> inline void I(T &a, Args &... args) { I(a); I(args...); }
 
 
 inline void OUT(int a) { printf("%d", a); } inline void OUT(LL a) { printf("%lld", a); }

@@ -70,11 +70,11 @@ template<typename T, typename... Args> inline void I(T &a, Args &... args) { I(a
 inline void OUT(int a) { printf("%d", a); }
 inline void OUT(LL a) { printf("%lld", a); }
 inline void OUT(ULL a) { printf("%llu", a); }
-inline void OUT(bool a) { printf("%d", a); }
 inline void OUT(const char* a) { printf("%s", a); }
 inline void OUT(char* a) { printf("%s", a); }
 inline void OUT(char a) { printf("%c", a); }
 inline void OUT(string a) { rep(it, a.begin(), a.end()) printf("%c", *it); }
+inline void OUT(bool a) { printf("%d", a); }
 template<typename T, typename... Args> inline void OUT(T a, Args... args) { OUT(a); OUT(" "); OUT(args...); }
 template<typename... Args> inline void O(Args... args) { OUT(args...); OUT("\n"); }
 

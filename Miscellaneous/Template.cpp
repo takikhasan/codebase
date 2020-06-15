@@ -70,12 +70,11 @@ inline void OUT(const int &a) { printf("%d", a); }
 inline void OUT(const LL &a) { printf("%lld", a); }
 inline void OUT(const ULL &a) { printf("%llu", a); }
 inline void OUT(const char *a) { printf("%s", a); }
-inline void OUT(char *a) { printf("%s", a); }
 inline void OUT(const char &a) { printf("%c", a); }
 inline void OUT(const string &a) { for (const char &aa : a) OUT(aa); }
 inline void OUT(const bool &a) { printf("%d", a); }
-template<typename T, typename... Args> inline void OUT(T a, Args... args) { OUT(a); OUT(" "); OUT(args...); }
-template<typename... Args> inline void O(Args... args) { OUT(args...); OUT("\n"); }
+template<typename T, typename... Args> inline void OUT(const T &a, const Args &... args) { OUT(a); OUT(" "); OUT(args...); }
+template<typename... Args> inline void O(const Args &... args) { OUT(args...); OUT("\n"); }
 
 
 template<typename T1, typename T2>

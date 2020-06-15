@@ -18,7 +18,6 @@ using namespace std;
 #define     ss                      second
 #define     SZ(x)                   (int)x.size()
 #define     all(x)                  x.begin(), x.end()
-#define     rep(i, begin, end)      for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 
 
 #define     sp(x)                   setprecision(x) << fixed

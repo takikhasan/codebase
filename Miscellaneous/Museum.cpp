@@ -18,7 +18,14 @@ void err(const string &name, int in, T a, Args... args) {
 	err(name, ++in, args...);
 }
 
+
 /* error() function */
+template<typename T1, typename T2>
+inline ostream& operator<<(ostream& os, pair<T1, T2> p) { os << "{" << p.first << ", " << p.second << "}"; return os; }
+template<typename T>
+inline ostream& operator<<(ostream& os, vector<T>& a) { os << "["; for (int i = 0; i < (int)a.size(); i++) { if (i) os << ", "; os << a[i]; } os << "]"; return os; }
+
+
 #define error(args...) { string _s = #args; replace(_s.begin(), _s.end(), ',', ' '); stringstream _ss(_s); istream_iterator<string> _it(_ss); err(_it, args); }
 void err(istream_iterator<string> it) {}
 template<typename T, typename... Args>

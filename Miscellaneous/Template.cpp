@@ -74,7 +74,7 @@ inline void OUT(const char &a) { printf("%c", a); }
 inline void OUT(const string &a) { for (const char &aa : a) OUT(aa); }
 inline void OUT(const bool &a) { printf("%d", a); }
 template<typename T1, typename T2> inline void OUT(const pair<T1, T2> &a) { OUT("{"); OUT(a.ff); OUT(", "); OUT(a.ss); OUT("}"); }
-template<typename T> inline void OUT(const T &a) { int i = 0; OUT("["); for (const auto &aa : a) { if (i++) OUT(", "); OUT(aa); } OUT("]"); }
+template<typename T> inline void OUT(const T &a) { int i = 0; OUT("{"); for (const auto &aa : a) { if (i++) OUT(", "); OUT(aa); } OUT("}"); }
 template<typename T, typename... Args> inline void OUT(const T &a, const Args &... args) { OUT(a); OUT(" "); OUT(args...); }
 template<typename... Args> inline void O(const Args &... args) { OUT(args...); OUT("\n"); }
 

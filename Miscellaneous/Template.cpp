@@ -98,7 +98,7 @@ void err(const string &name, int in, T a, Args... args) {
         curr_name.pb(name[in++]);
     }
     if (curr_name.back() == ' ') curr_name.pop_back();
-	cout << curr_name << " = " << a << (sizeof...(args) ? ", " : "\n");
+	OUT(curr_name), OUT(" = "), OUT(a), OUT((sizeof...(args) ? ", " : "\n"));
 	err(name, ++in, args...);
 }
 

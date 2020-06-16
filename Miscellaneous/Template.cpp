@@ -79,23 +79,12 @@ template<typename T, typename... Args> inline void OUT(const T &a, const Args &.
 template<typename... Args> inline void O(const Args &... args) { OUT(args...); OUT("\n"); }
 
 
-int DEBUG_LINE = 0;
-#define error(args...) { cout << "[DEBUG] Line " << DEBUG_LINE++ << ": "; string _s = #args; err(_s, 0, args); }
-void err(const string &name, int in) {}
+#define error(args...) { string _s = "[" + string(#args) + "] = ["; OUT(_s); err(args); }
+void err() {}
 template<typename T, typename... Args>
-void err(const string &name, int in, T a, Args... args) {
-    if (name[in] == ' ') in++; string curr_name;
-    while (in < SZ(name) && name[in] != ',') {
-        if (name[in] == 34 || name[in] == 39) {
-            curr_name.pb(name[in]);
-            char c = name[in++];
-            while (name[in] != c) curr_name.pb(name[in++]);
-        }
-        curr_name.pb(name[in++]);
-    }
-    if (curr_name.back() == ' ') curr_name.pop_back();
-	OUT(curr_name), OUT(" = "), OUT(a), OUT((sizeof...(args) ? ", " : "\n"));
-	err(name, ++in, args...);
+void err(T a, Args... args) {
+	OUT(a), OUT((sizeof...(args) ? ", " : "]\n"));
+	err(args...);
 }
 
 

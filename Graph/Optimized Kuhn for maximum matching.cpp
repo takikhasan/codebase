@@ -10,10 +10,12 @@ struct BipartiteMatcher {
     BipartiteMatcher(int n, int m) :
         G(n), L(n, -1), R(m, -1), Viz(n) {
     }
-    void AddEdge(int a, int b) {
+    void AddEdge(int a, int b)
+    {
         G[a].push_back(b);
     }
-    bool Match(int node) {
+    bool Match(int node)
+    {
         if (Viz[node]) return false;
         Viz[node] = true;
         for (auto vec : G[node]) {
@@ -32,7 +34,8 @@ struct BipartiteMatcher {
         }
         return false;
     }
-    int Solve() {
+    int Solve()
+    {
         bool ok = true;
         while (ok) {
             ok = 0;

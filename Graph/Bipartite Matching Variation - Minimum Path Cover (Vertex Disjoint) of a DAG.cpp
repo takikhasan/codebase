@@ -59,11 +59,11 @@ struct BipartiteMatcher {
         ii. https://towardsdatascience.com/solving-minimum-path-cover-on-a-dag-21b16ca11ac0
         iii. https://codeforces.com/blog/entry/13320?#comment-181252
 */
-struct MPC
+struct MPC_VD_DAG
 {
     int n;
     BipartiteMatcher G = BipartiteMatcher(0, 0);
-    MPC(int n) : n(n), G(n, n) {}
+    MPC_VD_DAG(int n) : n(n), G(n, n) {}
     void addEdge(int u, int v) {
         G.AddEdge(u, v);
     }

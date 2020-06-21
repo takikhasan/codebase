@@ -9,6 +9,10 @@ using namespace std;
 #define     LL                      long long int
 #define     LD                      long double
 #define     ULL                     unsigned long long int
+#define     VI                      vector<int>
+#define     VB                      vector<bool>
+#define     VLL                     vector<LL>
+#define     VULL                    vector<ULL>
 
 
 #define     pii                     pair<int, int>

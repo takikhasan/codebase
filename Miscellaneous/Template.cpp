@@ -55,6 +55,8 @@ int dx4[] = { 0, 0, -1, +1 };
 int dy4[] = { +1, -1, 0, 0 };
 int dx8[] = { 1, 1, 0, -1, -1, -1, 0, 1, 0 };
 int dy8[] = { 0, 1, 1, 1, 0, -1, -1, -1, 0 };
+int dx8Knight[] = { +2, +2, +1, -1, -2, -2, -1, +1 };
+int dy8Knight[] = { +1, -1, -2, -2, -1, +1, +2, +2 };   /* clockwise, starting from 3 o'clock */
 
 
 inline void I(int &a) { scanf("%d", &a); }

@@ -12,6 +12,7 @@ using namespace std;
 #define     VI                      vector<int>
 #define     VB                      vector<bool>
 #define     VLL                     vector<LL>
+#define     VLD                     vector<LD>
 #define     VULL                    vector<ULL>
 
 

@@ -24,4 +24,5 @@ How many ways?
     => nCr(n + k - 1, n);
 
 nCr = n! / (r! * (n - r)!)
+nCr = (n-1)Cr + (n-1)C(r-1)
 nPr = n! / (n - r)!

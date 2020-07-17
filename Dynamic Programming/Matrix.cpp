@@ -61,6 +61,23 @@ struct Matrix
         return ret;
     }
 
+    template<typename P>
+    Matrix faster_pow(P p) {  /** This is faster than pow() in my experience, but I'm keeping both for the moment. */
+        int row = SZ(matrix);
+        int col = SZ(matrix[0]);
+        Matrix ret(row, col);
+        for (int i = 0; i < row; i++) {
+            ret.matrix[i][i] = 1;
+        }
+        Matrix temp = *this;
+        while (p) {
+            if (p & 1) ret = ret * temp;
+            temp = temp * temp;
+            p >>= 1;
+        }
+        return ret;
+    }
+
     template<typename N>
     Matrix& operator % (const N ignore)
     {

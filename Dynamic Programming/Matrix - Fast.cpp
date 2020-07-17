@@ -2,7 +2,7 @@
     #1. This is a mimic of: https://github.com/takikhasan/codebase/blob/master/Dynamic%20Programming/Matrix.cpp
     #2. But, in this implementation, we give up some generalization for performance (mainly time complexity)
     #3. Problems that specifically require this version (easy to hard) - (role model submission / problem page):
-        i.  https://vjudge.net/solution/26396551
+        i.  https://vjudge.net/solution/26396639
 */
 using matrix_type = LD;   /** CHANGE IF NEEDED */
 struct Matrix
@@ -44,9 +44,13 @@ struct Matrix
         return ret;
     }
     inline Matrix pow(int p) {  /** CHANGE TYPE OF 'p' IF NEEDED */
-        Matrix ret(2, 2);
-        ret.matrix[0][0] = ret.matrix[1][1] = 1;
-        ret.matrix[0][1] = ret.matrix[1][0] = 0;
+        Matrix ret(row, col);
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                ret.matrix[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < row; i++) ret.matrix[i][i] = 1;
         Matrix temp = *this;
         while (p) {
             if (p & 1) ret = ret * temp;

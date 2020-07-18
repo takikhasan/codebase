@@ -27,4 +27,9 @@ nCr = n! / (r! * (n - r)!)
 nCr = (n-1)Cr + (n-1)C(r-1)
 nPr = n! / (n - r)!
 
-1 / (x - 1) = 1 / x + 1 / (x ^ 2) + 1 / (x ^ 3) + 1 / (x ^ 4) + 1 / (x ^ 5) + 1 / (x ^ 6) + ....
+Geometric series heavily applicable for probability problems (because, r >= 0 && r <= 1 for probability problems):
+r^0 + r^1 + r^2 + r^3 + ... = 1 / (1 - r), for |r| < 1.
+Handle r = 1 as a corner case if r = 1 is possible.
+Other forms:
+1 + r^1 + r^2 + r^3 + ... = 1 / (1 - r), for |r| < 1.   [Same Thing]
+r^1 + r^2 + r^3 + ... = (1 / (1 - r)) - 1, for |r| < 1. [Subtracting 1 from Both Sides]

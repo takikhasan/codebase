@@ -14,6 +14,7 @@ using namespace std;
 #define     VLD                     vector<LD>
 #define     VLL                     vector<LL>
 #define     VULL                    vector<ULL>
+#define     VVI                     vector<VI>
 
 
 #define     pii                     pair<int, int>

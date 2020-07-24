@@ -52,22 +52,22 @@ struct BipartiteMatcher {
 };
 
 /*
-    #1. Minimum Path Cover (Vertex Disjoint) of a DAG
-    #2. We want to cover all the nodes using minimum number of paths that don't share any vertex
-    #3. Intuition:
-        i. https://en.wikipedia.org/wiki/Maximum_flow_problem#Minimum_path_cover_in_directed_acyclic_graph
-        ii. https://towardsdatascience.com/solving-minimum-path-cover-on-a-dag-21b16ca11ac0
-        iii. https://codeforces.com/blog/entry/13320?#comment-181252
+    #1. Minimum Vertex Cover of a Bipartite Graph
+    #2. We want to cover at least one end of all the edges using minimum number of nodes.
+    #3. According to Konig's theorem: In bipartite graphs, maximum matching = minimum vertex cover.
+    #4. Intuition:
+        i.  https://en.wikipedia.org/wiki/K%C5%91nig%27s_theorem_(graph_theory)#:~:text=In%20particular%2C%20the%20minimum%20vertex,in%20fact%20the%20same%20size.
+    #5. Problems (easy to hard) - (role model submission / problem page):
+        i.  https://vjudge.net/solution/26503097
 */
-struct MPC_VD_DAG
+struct MVC
 {
-    int n;
     BipartiteMatcher G = BipartiteMatcher(0, 0);
-    MPC_VD_DAG(int n) : n(n), G(n, n) {}
+    MVC(int n, int m) : G(n, m) {}
     void addEdge(int u, int v) {
         G.AddEdge(u, v);
     }
     int solve() {
-        return n - G.Solve();
+        return G.Solve();
     }
 };

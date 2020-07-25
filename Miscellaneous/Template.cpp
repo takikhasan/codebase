@@ -32,7 +32,7 @@ using namespace std;
 
 #define     PI                      acos(-1.0)
 #define     EPS                     1e-12
-#define     S_SIZE                  4000010     /* 3.81640625 mb */
+#define     S_SIZE                  5000010     /* 4.7683811187744140625 mb */
 
 
 const LL inf = 1000000000;

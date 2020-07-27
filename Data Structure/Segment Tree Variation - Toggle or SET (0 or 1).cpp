@@ -32,7 +32,7 @@
 
 
     Problems (easy to hard) - (role model submission / problem page):
-        i.  https://vjudge.net/solution/26544980
+        i.  https://vjudge.net/solution/26544980    (direct template)
 */
 
 using T = int;  /// USE LONG LONG INT WHEN RANGE IS TOO BIG

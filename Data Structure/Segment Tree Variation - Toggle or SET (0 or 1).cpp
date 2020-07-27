@@ -32,7 +32,7 @@
 
 
     Problems (easy to hard) - (role model submission / problem page):
-        i.  https://vjudge.net/solution/26539805
+        i.  https://vjudge.net/solution/26544980
 */
 
 using T = int;  /// USE LONG LONG INT WHEN RANGE IS TOO BIG
@@ -79,7 +79,8 @@ struct Node {
 	void toggle(T L, T R) {
 		if (R <= lo || hi <= L) return;
 		if (L <= lo && hi <= R) {
-            mtoggle ^= 1;
+            if (mset != -1) mset ^= 1;
+            else mtoggle ^= 1;
             val = hi - lo - val;  /** We replace with complement, whenever we are in a relevant node */
 		}
 		else {

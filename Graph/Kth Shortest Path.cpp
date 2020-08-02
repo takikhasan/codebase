@@ -4,7 +4,7 @@
     #3. Introduced two data types for memory efficiency
     #4. In a general graph, we are interested in the Kth shortest paths to every node from a source node
     #5. Problems (easy to hard) - (role model submission / problem page):
-        i.  https://vjudge.net/solution/26653200
+        i.  https://vjudge.net/solution/26653455
 */
 template<typename T1, typename T2>
 class DirectedGraph
@@ -83,11 +83,11 @@ public:
         }
         /*
             Time Complexity benchmark:
-                After a lot of submissions, using struct as the comparator seems constant,
-                while lambda is sometime slower, sometimes the same as struct. (We're going with struct)
-                struct (40ms) : https://vjudge.net/solution/26653200
-                lambda (50ms) : https://vjudge.net/solution/26653191
-                lambda (40ms) : https://vjudge.net/solution/26653309
+                After a lot of submissions, we're going with struct.
+                As of now, difference between lambda and struct seems very little.
+                But interestingly, even considering the slight randomness of runtime,
+                the fastest submission using struct (30ms) is faster than the fastest submission using lambda (40ms).
+                The submissions can be checked in my submissions on vjudge for UVA 'Not the Best'.
         */
     }
     vector<int> path(int dest, int k) /* Get the kth (1 indexed) shortest path to the dest */

@@ -3,7 +3,9 @@
     #2. T2 -> Data type required for maximum edge weight
     #3. Introduced two data types for memory efficiency
     #4. In a general graph, we are interested in the Kth shortest paths to every node from a source node
-    #5. Problems (easy to hard) - (role model submission / problem page):
+    #5. Source Inspiration:
+        i.  https://github.com/ilyesLtifi/Competitive-Programming/blob/master/UVA/UVA%2010740.cpp
+    #6. Problems (easy to hard) - (role model submission / problem page):
         i.  https://vjudge.net/solution/26653455
 */
 template<typename T1, typename T2>

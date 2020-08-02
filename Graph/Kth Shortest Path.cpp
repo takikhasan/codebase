@@ -62,7 +62,7 @@ public:
                 dist[i][j] = INF;
             }
         }
-//        auto compare = [&](const pair<ii, int> &a, const pair<ii, int> &b) { return a.ff.ff > b.ff.ff; };
+//        auto compare = [](const pair<ii, int> &a, const pair<ii, int> &b) -> bool { return a.ff.ff > b.ff.ff; }; /* using capture should be useless here and may even be costly */
 //        priority_queue<pair<ii, int>, vector<pair<ii, int>>, decltype(compare)> pq(compare); /** BFS: queue<ii> pq; */
         priority_queue<pair<ii, int>, vector<pair<ii, int>>, Compare> pq; /** BFS: queue<ii> pq; */
         pq.push({ii(0, s), -1});
@@ -83,9 +83,11 @@ public:
         }
         /*
             Time Complexity benchmark:
-                After a lot of submissions, using struct as the comparator seems faster than lambda.
+                After a lot of submissions, using struct as the comparator seems constant,
+                while lambda is sometime slower, sometimes the same as struct. (We're going with struct)
                 struct (40ms) : https://vjudge.net/solution/26653200
                 lambda (50ms) : https://vjudge.net/solution/26653191
+                lambda (40ms) : https://vjudge.net/solution/26653309
         */
     }
     vector<int> path(int dest, int k) /* Get the kth (1 indexed) shortest path to the dest */

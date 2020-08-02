@@ -4,7 +4,7 @@
     #3. Introduced two data types for memory efficiency
     #4. In a general graph, we are interested in the Kth shortest paths to every node from a source node
     #5. Problems (easy to hard) - (role model submission / problem page):
-        i.  https://vjudge.net/solution/26653200 (direct template)
+        i.  https://vjudge.net/solution/26653200
 */
 template<typename T1, typename T2>
 class DirectedGraph

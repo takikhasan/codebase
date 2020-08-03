@@ -6,8 +6,8 @@
 template<typename T1, typename T2>
 struct LCA
 {
-    typedef pair<T2, int> ii;
-    const int MIN = 1, MAX = 2, SUM = 3;
+    typedef pair<int, T2> ii;
+    const int MIN = 1, MAX = 2, SUM = 3, GCD = 4;
     /* 0 indexed */
     int n;
     vector<int> l;
@@ -21,18 +21,18 @@ struct LCA
     vector<vector<ii>> g;
     LCA(int n, int option) : n(n), l(n), g(n), OPTION(option)
     {
-        LOG = log2(n) + 2;
-        OPTION_VAL = (OPTION == SUM) ? 0 : ((OPTION == MIN) ? numeric_limits<T1>::max() : numeric_limits<T1>::min());
+        LOG = log2(n) + 1;
+        OPTION_VAL = (OPTION == SUM || option == GCD) ? 0 : ((OPTION == MIN) ? numeric_limits<T1>::max() : numeric_limits<T1>::min());
     }
     LCA(int n, vector<vector<ii>> g, int option) : n(n), l(n), g(g), OPTION(option)
     {
-        LOG = log2(n) + 2;
-        OPTION_VAL = (OPTION == SUM) ? 0 : ((OPTION == MIN) ? numeric_limits<T1>::max() : numeric_limits<T1>::min());
+        LOG = log2(n) + 1;
+        OPTION_VAL = (OPTION == SUM || option == GCD) ? 0 : ((OPTION == MIN) ? numeric_limits<T1>::max() : numeric_limits<T1>::min());
     }
     void addEdge(int u, int v, T2 w)
     {
         g[u].pb(mp(v, w));
-        g[v].pb(mp(u, w));
+//        g[v].pb(mp(u, w));
     }
     void dfs(int u, int pp, int ll)
     {
@@ -47,9 +47,10 @@ struct LCA
     }
     T1 func(T1 x, T2 y)
     {
-        if (OPTION == SUM) return x + y;
-        else if (OPTION == MIN) return min(x, y);
-        else if (OPTION == MAX) return max(x, y);
+//        return x + y;
+//        return min(x, y);
+//        return max(x, y);
+        return gcd(x, y);
     }
     void build()
     {

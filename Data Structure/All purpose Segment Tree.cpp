@@ -109,4 +109,11 @@ struct Node {
 	}
 };
 
+void clean(Node *root)
+{
+    if (root->l) clean(root->l);
+    if (root->r) clean(root->r);
+    delete root;
+}
+
 /** All purpose segment tree */

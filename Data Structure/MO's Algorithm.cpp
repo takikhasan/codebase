@@ -3,6 +3,7 @@
         i.  https://cp-algorithms.com/data_structures/sqrt_decomposition.html
     #2. Problems (easy to hard):
         i.  https://codeforces.com/contest/86/submission/91150884
+        ii. https://vjudge.net/solution/27060719
 */
 namespace MO
 {

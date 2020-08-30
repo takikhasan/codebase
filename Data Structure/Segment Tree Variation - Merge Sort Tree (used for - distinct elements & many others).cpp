@@ -26,7 +26,7 @@
             This tree, or the other two types mentioned in updates section (and even others) can be used for many queries
             that may be thought of as problems that require MO's algorithm (sqrt decomposition).
 
-            Obviously, I don't prefer O((N + Q)sqrt(N)) to O(Q(log^2 N) + N(log^2 N)).
+            Obviously, I don't prefer O((N + Q)sqrt(N)) to O(Q(log^2 N) + N(log N)).
             The sqrt(N) is ungraceful in my opinion. Also, MO is offline. No updates, nothing. We don't want that. Using powerful
             data structures like the ones I have mentioned, update is also possible.
 

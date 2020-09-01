@@ -19,6 +19,9 @@ Bitwise fact:
 Position of rightmost set bit(0 indexed, from right):
     int pos = log2(mask&-mask);
 
+Bitset:
+    B.Find_first(); B.Find_next(pos);   /** Complexity: (BITSET_LENGTH / 32)  */
+
 Given n coins, if we have to distribute them between k people(giving someone zero is allowed, but we have to give away all of the coins)
 How many ways?
     => nCr(n + k - 1, n);

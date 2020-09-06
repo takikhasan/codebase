@@ -3,6 +3,8 @@
     #2. Using that, we can get a few queries like path sum query in O(1).
     #3. Source:
         i.  https://github.com/kth-competitive-programming/kactl/blob/master/content/graph/LCA.h
+    #4. Problems (Easy to Hard):
+        i.  https://vjudge.net/solution/27176384
 */
 
 #define rep(i, a, b) for(int i = a; i < (b); ++i)

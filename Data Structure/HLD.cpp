@@ -43,6 +43,30 @@ template <bool VALS_EDGES> struct HLD {
 			dfsHld(u);
 		}
 	}
+	/**
+        par[u] = parent of u, par[0] = -1, 0 is root.
+        siz[u] = subtree size of u, including u itself.
+        depth[u] = number of edges from root (0).
+
+        pos[u] = index of u in the segment tree.
+        rt[u] = highest vertex in the chain of u.
+
+        Range of the subtree of u in the segment tree:
+            -> [ pos[u] ... (pos[u]+siz[u]-1) ] (inclusive).
+            -> Trick for edge (value in edges) mode:
+                Each position of the segment tree corresponds to the edge between the corresponding node and its parent.
+                So, the range will be [ (pos[u]+1) ... (pos[u]+siz[u]-1) ] (inclusive).
+
+        If u and v are in the same chain, for the corresponding segment tree range:
+            if (depth[u] > depth[v) /// Because, lower depth has lower position in the segment tree.
+                swap(u, v);
+            -> Now, the range is [ pos[u] ... pos[v] ] (inclusive).
+            -> Trick for edge (value in edges) mode:
+                Each position of the segment tree corresponds to the edge between the corresponding node and its parent.
+                So, the range will be [ (pos[u]+1) ... pos[v] ] (inclusive).
+
+        The chains are vertex disjoint.
+	*/
 	template <class B> void process(int u, int v, B op) {
 		for (; rt[u] != rt[v]; v = par[rt[v]]) {
 			if (depth[rt[u]] > depth[rt[v]]) swap(u, v);

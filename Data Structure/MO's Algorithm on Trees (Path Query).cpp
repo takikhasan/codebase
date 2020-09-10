@@ -150,7 +150,8 @@ struct LCA
         i.  https://codeforces.com/blog/entry/43230
         ii. https://cp-algorithms.com/data_structures/sqrt_decomposition.html
     #2. Problems (easy to hard):
-        i.  https://vjudge.net/solution/27098043
+        i.  https://vjudge.net/solution/27221065
+        ii. https://vjudge.net/solution/27221085
 */
 namespace MO_Tree_Path
 {

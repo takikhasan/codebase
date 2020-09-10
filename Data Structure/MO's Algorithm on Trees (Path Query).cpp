@@ -184,12 +184,12 @@ namespace MO_Tree_Path
         VI cnt;
 
         inline void actual_remove(int node) {
-            if (!EDGE_MODE && !node) return;
+            if (EDGE_MODE && !node) return;
 
             /** MAIN PART */
         }
         inline void actual_add(int node) {
-            if (!EDGE_MODE && !node) return;
+            if (EDGE_MODE && !node) return;
 
             /** MAIN PART */
         }

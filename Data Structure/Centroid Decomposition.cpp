@@ -4,7 +4,8 @@
     #2. Source:
         i.  https://codeforces.com/contest/342/submission/11945201
     #3. Problems (Easy to Hard):
-        i.  https://vjudge.net/solution/27176384
+        i.  https://vjudge.net/solution/27239179
+        ii. https://vjudge.net/solution/27176384
 */
 struct CentroidDecomposition {
 	vector<set<int>> g; // it's not vector<vector<int>>!

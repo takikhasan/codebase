@@ -1,10 +1,14 @@
 /*
-    #1. Source & Intuition:
+    #1. Complexity:
+        i.  add() & removes():  O((N + Q) * F * sqrt(N)) total, where O(F) is the complexity of add and remove function.
+        ii. get_answer():       Depends, usually O(1) per call (query).
+    #2. Source & Intuition:
         i.  https://cp-algorithms.com/data_structures/sqrt_decomposition.html
-    #2. Problems (easy to hard):
+    #3. Problems (easy to hard):
         i.  https://codeforces.com/contest/86/submission/91150884
         ii. https://vjudge.net/solution/27060719
-        iii.https://vjudge.net/solution/27098043
+        iii.https://vjudge.net/solution/27298433
+        iv. https://vjudge.net/solution/27098043
 */
 namespace MO
 {

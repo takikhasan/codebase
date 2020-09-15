@@ -21,7 +21,7 @@ struct RMQ {
 		}
 	}
 
-	T query(int a, int b) {
+	inline T query(int a, int b) const {
 		assert(a < b); // or return inf if a == b
 		int dep = 31 - __builtin_clz(b - a);
 		return min(jmp[dep][a], jmp[dep][b - (1 << dep)]);
@@ -48,13 +48,13 @@ struct LCA {
 		}
 	}
 
-	int lca(int a, int b) {
+	inline int lca(int a, int b) const {
 		if (a == b) return a;
 		tie(a, b) = minmax(time[a], time[b]);
 		return path[rmq.query(a, b)];
 	}
 
-	int distt(int a, int b) { return dist[a] + dist[b] - 2 * dist[lca(a,b)]; }
+	inline int distt(int a, int b) const { return dist[a] + dist[b] - 2 * dist[lca(a,b)]; }
 	/**
         When weight is in nodes (For this template and the other),
             Tree creation:

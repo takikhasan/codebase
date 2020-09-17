@@ -7,6 +7,8 @@
         i.  https://vjudge.net/solution/27239179
         ii. https://vjudge.net/solution/27176384
         iii.https://vjudge.net/solution/27296953
+        iv. https://vjudge.net/solution/27315325
+        v.  https://vjudge.net/solution/27331469
 */
 struct CentroidDecomposition {
 	VI par;

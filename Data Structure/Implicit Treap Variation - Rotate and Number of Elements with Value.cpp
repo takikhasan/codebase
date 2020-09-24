@@ -2,7 +2,8 @@
     #1. Intuition: https://cp-algorithms.com/data_structures/treap.html
     #2. Source Inspiration: https://github.com/kth-competitive-programming/kactl/blob/master/content/data-structures/Treap.h
     #3. Problems (easy to hard):
-        i.  https://vjudge.net/solution/27020013 (direct template)
+        i.  https://vjudge.net/solution/27442436 (Same Core Idea: One treap for each value + One global treap)
+        ii. https://vjudge.net/solution/27020013 (direct template)
 */
 
 struct Node {

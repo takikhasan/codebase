@@ -2,7 +2,8 @@
     #1. Intuition: https://cp-algorithms.com/data_structures/treap.html
     #2. Source Inspiration: https://github.com/kth-competitive-programming/kactl/blob/master/content/data-structures/Treap.h
     #3. Problems (easy to hard):
-        i.  https://vjudge.net/solution/27020013
+        i.  https://vjudge.net/solution/27442436
+        ii. https://vjudge.net/solution/27020013
 */
 
 struct Node {
